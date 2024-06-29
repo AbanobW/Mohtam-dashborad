@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KTIcon } from "../../../helpers";
-import { Add } from "../../../../app/modules/subjects/Add";
-import { Edit } from "../../../../app/modules/subjects/Edit";
+import { Add } from "../../../../app/modules/tags/Add";
+import { Edit } from "../../../../app/modules/tags/Edit";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
@@ -20,7 +20,7 @@ type Item = {
 	// articles: string[];
 };
 
-const SubjectsTable: React.FC<Props> = ({ className }) => {
+const TagsTable: React.FC<Props> = ({ className }) => {
 	const [items, setItems] = useState<Item[]>([]);
 	const [page, setPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
@@ -79,7 +79,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const handleDelete = (id: string) => {
 		Swal.fire({
 			title: "Are you sure?",
-			text: "You will not be able to recover this subject!",
+			text: "You will not be able to recover this tag!",
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Yes, delete it!",
@@ -96,15 +96,15 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 					.then((response) => {
 						if (response.ok) {
 							setItems(items.filter((item) => item.id !== id));
-							toast.success("Subject deleted successfully");
+							toast.success("Tag deleted successfully");
 						} else {
 							console.error("Error deleting item:", response.statusText);
-							toast.error("Failed to delete subject");
+							toast.error("Failed to delete tag");
 						}
 					})
 					.catch((error) => {
 						console.error("Error deleting item:", error);
-						toast.error("Failed to delete subject");
+						toast.error("Failed to delete tag");
 					});
 			}
 		});
@@ -120,7 +120,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
 				<h3 className="card-title align-items-start flex-column">
-					<span className="card-label fw-bold fs-3 mb-1">Subjects</span>
+					<span className="card-label fw-bold fs-3 mb-1">Tags</span>
 				</h3>
 				<div className="card-toolbar">
 					<a
@@ -129,7 +129,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 						data-bs-target="#kt_modal_add_Sub"
 					>
 						<KTIcon iconName="plus" className="fs-2" />
-						Add New Subject
+						Add New Tag
 					</a>
 
 					<Add onAddSuccess={() => fetchSubjects(page)} />
@@ -139,7 +139,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 				<div className="table-responsive">
 					<table className="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 						<thead>
-							<tr className="fw-bold text-muted bg-light border-bottom">
+							<tr className="fw-bold text-muted bg-light border-none border-bottom">
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-200px">Title</th>
 								<th className="min-w-300px">Description</th>
@@ -242,4 +242,4 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	);
 };
 
-export { SubjectsTable };
+export { TagsTable };

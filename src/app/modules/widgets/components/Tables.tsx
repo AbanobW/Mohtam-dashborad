@@ -10,9 +10,9 @@ import {
   TablesWidget8,
   TablesWidget9,
   TablesWidget10,
-  TablesWidget11,
+  // TablesWidget11,
   TablesWidget12,
-  TablesWidget13,
+  // TablesWidget13,
 } from '../../../../_metronic/partials/widgets'
 import { Toolbar } from '../../../../_metronic/layout/components/toolbar/Toolbar'
 import { Content } from '../../../../_metronic/layout/components/Content'
@@ -90,11 +90,11 @@ const Tables: FC = () => {
 
         <TablesWidget10 className='mb-5 mb-xl-8' />
 
-        <TablesWidget11 className='mb-5 mb-xl-8' />
+        {/* <TablesWidget11 className='mb-5 mb-xl-8' /> */}
 
         <TablesWidget12 className='mb-5 mb-xl-8' />
 
-        <TablesWidget13 className='mb-5 mb-xl-8' />
+        {/* <TablesWidget13 className='mb-5 mb-xl-8' /> */}
       </Content>
     </>
   )

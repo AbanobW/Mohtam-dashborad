@@ -16,6 +16,7 @@ import { ArticlesWrapper } from "../modules/articles/articles";
 import { AddArticlesWrapper } from "../modules/articles/Add";
 import { EditArticlesWrapper } from "../modules/articles/Edit";
 import { UsersWrapper } from "../modules/users/users";
+import { TagsWrapper } from "../modules/tags/tags";
 
 /**
  * Base URL of the website.
@@ -30,17 +31,18 @@ const AppRoutes: FC = () => {
 		<BrowserRouter basename={BASE_URL}>
 			<Routes>
 				<Route element={<App />}>
-					<Route path="users" element={<UsersWrapper />} />
-					<Route path="subjects" element={<SubjectsWrapper />} />
-					<Route path="articles" element={<ArticlesWrapper />} />
-					<Route path="addArticle" element={<AddArticlesWrapper />} />
-					<Route path="editArticle" element={<EditArticlesWrapper />} />
-					<Route path="error/*" element={<ErrorsPage />} />
-					<Route path="logout" element={<Logout />} />
 					{currentUser ? (
 						<>
 							<Route path="/*" element={<PrivateRoutes />} />
 							<Route index element={<Navigate to="/dashboard" />} />
+							<Route path="users" element={<UsersWrapper />} />
+							<Route path="tags" element={<TagsWrapper />} />
+							<Route path="subjects" element={<SubjectsWrapper />} />
+							<Route path="articles" element={<ArticlesWrapper />} />
+							<Route path="addArticle" element={<AddArticlesWrapper />} />
+							<Route path="editArticle" element={<EditArticlesWrapper />} />
+							<Route path="error/*" element={<ErrorsPage />} />
+							<Route path="logout" element={<Logout />} />
 						</>
 					) : (
 						<>

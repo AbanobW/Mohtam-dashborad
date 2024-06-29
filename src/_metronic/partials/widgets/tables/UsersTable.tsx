@@ -140,9 +140,9 @@ const UsersTable: React.FC<Props> = () => {
 
 				<div className="card-body py-4">
 					<div className="table-responsive">
-						<table className="table align-middle table-row-dashed fs-6 gy-5">
+						<table className="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 							<thead>
-								<tr className="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+								<tr className="text-start text-muted bg-light fw-bolder fs-7 text-uppercase gs-0 border-bottom">
 									<th className="w-10px pe-2">No.</th>
 									<th className="min-w-125px">Name</th>
 									<th className="min-w-125px">Email</th>
@@ -175,12 +175,12 @@ const UsersTable: React.FC<Props> = () => {
 											</div>
 										</td>
 										<td>{item.email}</td>
-										<td>{item.role}</td>
+										<td><div className="badge badge-light fw-bolder fs-6">{item.role}</div> </td>
 										<td>
 											{item.active ? (
-												<div className="badge badge-light-success">Active</div>
+												<div className="badge badge-light-success fs-6">Active</div>
 											) : (
-												<div className="badge badge-light-danger">Inactive</div>
+												<div className="badge badge-light-danger fs-6">Inactive</div>
 											)}
 										</td>
 										<td>{new Date(item.createdAt).toLocaleDateString()}</td>
@@ -216,36 +216,35 @@ const UsersTable: React.FC<Props> = () => {
 							onEditSuccess={() => fetchUsers(page)}
 						/>
 					</div>
-				<div className="d-flex justify-content-start align-items-center mt-4">
-					<button
-						className="btn btn-light-primary"
-						disabled={page === 0}
-						onClick={() => fetchUsers(page - 1)}
-					>
-						Previous
-					</button>
-					<div className="mx-5">
-						
-						{Array.from({ length: totalPages }, (_, index) => (
-							<button
-								key={index}
-								className={`btn btn-light-primary mx-1 ${
-									index === page ? "active" : ""
-								}`}
-								onClick={() => fetchUsers(index)}
-							>
-								{index + 1}
-							</button>
-						))}
+					<div className="d-flex justify-content-start align-items-center mt-4">
+						<button
+							className="btn btn-light-primary"
+							disabled={page === 0}
+							onClick={() => fetchUsers(page - 1)}
+						>
+							Previous
+						</button>
+						<div className="mx-5">
+							{Array.from({ length: totalPages }, (_, index) => (
+								<button
+									key={index}
+									className={`btn btn-light-primary mx-1 ${
+										index === page ? "active" : ""
+									}`}
+									onClick={() => fetchUsers(index)}
+								>
+									{index + 1}
+								</button>
+							))}
+						</div>
+						<button
+							className="btn btn-light-primary"
+							disabled={page === totalPages - 1}
+							onClick={() => fetchUsers(page + 1)}
+						>
+							Next
+						</button>
 					</div>
-					<button
-						className="btn btn-light-primary"
-						disabled={page === totalPages - 1}
-						onClick={() => fetchUsers(page + 1)}
-					>
-						Next
-					</button>
-				</div>
 				</div>
 				<ToastContainer />
 			</div>

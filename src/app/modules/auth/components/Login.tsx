@@ -67,7 +67,7 @@ export function Login() {
       {/* begin::Heading */}
       <div className='text-center mb-11'>
       <Link to='/' className='mb-12'>
-            <img alt='Logo' src={toAbsoluteUrl('media/logos/custom-1.png')} className='h-75px mb-5' />
+            <img alt='Logo' src={toAbsoluteUrl('media/logos/demo6light.svg')} className='h-75px mb-5' />
           </Link>
         <h1 className='text-gray-900 fw-bolder mb-3'>Sign In</h1>
         
@@ -145,9 +145,9 @@ export function Login() {
         <div />
 
         {/* begin::Link */}
-        <Link to='/auth/forgot-password' className='link-primary'>
+        {/* <Link to='/auth/forgot-password' className='link-primary'>
           Forgot Password ?
-        </Link>
+        </Link> */}
         {/* end::Link */}
       </div>
       {/* end::Wrapper */}
@@ -170,13 +170,13 @@ export function Login() {
         </button>
       </div>
       {/* end::Action */}
-
+{/* 
       <div className='text-gray-500 text-center fw-semibold fs-6'>
         Not a Member yet?{' '}
         <Link to='/auth/registration' className='link-primary'>
           Sign up
         </Link>
-      </div>
+      </div> */}
     </form>
   )
 }

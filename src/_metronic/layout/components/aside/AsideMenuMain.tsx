@@ -24,6 +24,14 @@ export function AsideMenuMain() {
 			/>
 
 			<AsideMenuItem
+				to="/tags"
+				title="Tags"
+				fontIcon="bi-tags-fill fs-1"
+				bsTitle="TAGS"
+				className="py-2"
+			/>
+
+			<AsideMenuItem
 				to="/subjects"
 				title="Subjects"
 				fontIcon="bi-kanban-fill fs-1"

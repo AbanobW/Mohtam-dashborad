@@ -204,7 +204,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 				<div className="table-responsive">
 					<table className="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 						<thead>
-							<tr className="fw-bold text-muted bg-light border-none">
+							<tr className="fw-bold text-muted bg-light  border-bottom">
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-250px">Title</th>
 								<th className="min-w-300px">Summary</th>
@@ -266,9 +266,9 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 									{/* Published */}
 									<td>
 										{item.published ? (
-											<span className="badge badge-light-success">True</span>
+											<span className="badge badge-light-success fs-6">Published</span>
 										) : (
-											<span className="badge badge-light-danger">False</span>
+											<span className="badge badge-light-danger fs-6">Unpublished</span>
 										)}
 									</td>
 									<td className="text-end">
