@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import ReactQuill from "react-quill";
+import Select from "react-select";
 import "react-quill/dist/quill.snow.css";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../auth";
@@ -24,12 +25,18 @@ type Article = {
 	coverImageId: string;
 	sections: Section[];
 	subjectId: string;
+	tagIds: string[];
 	published: boolean;
 };
 
 type Subject = {
 	id: string;
 	title: string;
+};
+
+type Tag = {
+	id: string;
+	name: string;
 };
 
 const AddArticlesForm: React.FC<Props> = ({ className }) => {
@@ -41,17 +48,20 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 	const [coverImageId, setCoverImageId] = useState<string>("");
 	const [subjectId, setSubjectId] = useState<string>("");
+	const [tagIds, setTagIds] = useState<string[]>([]);
 	const [published, setPublished] = useState<boolean>(true);
 	const [sections, setSections] = useState<Section[]>([
 		{ order: 0, content: "", fileId: null },
 	]);
 	const [subjects, setSubjects] = useState<Subject[]>([]);
+	const [tags, setTags] = useState<Tag[]>([]);
 
 	useEffect(() => {
 		const fetchSubjects = async () => {
 			try {
 				const response = await fetch(
-					"http://167.172.165.109:8080/api/v1/subjects",{
+					"http://167.172.165.109:8080/api/v1/admin/subjects",
+					{
 						headers: {
 							Authorization: `Bearer ${authToken}`,
 							"Content-Type": "application/json",
@@ -67,7 +77,28 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 			}
 		};
 
+		const fetchTags = async () => {
+			try {
+				const response = await fetch(
+					"http://167.172.165.109:8080/api/v1/admin/tags",
+					{
+						headers: {
+							Authorization: `Bearer ${authToken}`,
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				const data = await response.json();
+				console.log("Fetched tags:", data);
+				setTags(data.items || []);
+			} catch (error) {
+				console.error("Error fetching tags:", error);
+				toast.error("Failed to fetch tags.");
+			}
+		};
+
 		fetchSubjects();
+		fetchTags();
 	}, []);
 
 	const handleSectionChange = (index: number, field: string, value: string) => {
@@ -136,6 +167,11 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		});
 	};
 
+	const handleTagChange = (selectedOptions: any) => {
+		const selectedTagIds = selectedOptions.map((option: any) => option.value);
+		setTagIds(selectedTagIds);
+	};
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -145,6 +181,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 			coverImageId,
 			sections,
 			subjectId,
+			tagIds,
 			published,
 		};
 
@@ -157,7 +194,6 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					method: "POST",
 					headers: {
 						Authorization: `Bearer ${authToken}`,
-
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(article),
@@ -174,6 +210,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				setCoverImageFile(null);
 				setCoverImageId("");
 				setSubjectId("");
+				setTagIds([]);
 				setPublished(false);
 				setSections([{ order: 0, content: "", fileId: null }]);
 			} else {
@@ -240,7 +277,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 							value={subjectId}
 							onChange={(e) => setSubjectId(e.target.value)}
 							required
-						>
+							>
 							<option value="">Select a subject</option>
 							{Array.isArray(subjects) &&
 								subjects.map((subject) => (
@@ -260,6 +297,20 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 							className="form-control"
 							id="coverImageFile"
 							onChange={handleCoverImageChange}
+						/>
+					</div>
+
+					<div className="mb-4 col-12 col-md-6">
+						<label htmlFor="tags" className="fs-5 fw-semibold mb-2">
+							Tags
+						</label>
+						<Select
+							isMulti
+							name="tags"
+							options={tags.map((tag) => ({ value: tag.id, label: tag.name }))}
+							className="basic-multi-select"
+							classNamePrefix="select"
+							onChange={handleTagChange}
 						/>
 					</div>
 

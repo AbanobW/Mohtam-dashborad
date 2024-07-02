@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { KTIcon } from "../../../_metronic/helpers";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,11 +9,8 @@ export const Add = ({ onAddSuccess }) => {
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 	const [formData, setFormData] = useState({
-		title: "",
-		description: "",
-		image: null,
+		name: "",
 	});
-	const fileInputRef = useRef(null);
 
 	const handleChange = (e: { target: { name: any; value: any } }) => {
 		const { name, value } = e.target;
@@ -23,21 +20,11 @@ export const Add = ({ onAddSuccess }) => {
 		});
 	};
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files && e.target.files[0];
-		if (file) {
-			setFormData({
-				...formData,
-				image: file,
-			});
-		}
-	};
-
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
 
 		// Check if any field is empty
-		if (!formData.title || !formData.description || !formData.image) {
+		if (!formData.name) {
 			toast.error("All fields are required. Please fill in all fields.", {
 				position: "top-right",
 				autoClose: 3000,
@@ -51,44 +38,15 @@ export const Add = ({ onAddSuccess }) => {
 		}
 
 		try {
-			// Request presigned URL and file ID
-			const presignedUrlResponse = await fetch("http://167.172.165.109:8080/api/v1/presignedurls", {
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${authToken}`,
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (!presignedUrlResponse.ok) {
-				throw new Error("Failed to get presigned URL");
-			}
-
-			const presignedUrlData = await presignedUrlResponse.json();
-			const presignedUrl = presignedUrlData.presignedUrl;
-			const fileId = presignedUrlData.fileId;
-
-			// Upload the image using the presigned URL
-			const uploadResponse = await fetch(presignedUrl, {
-				method: "PUT",
-				body: formData.image,
-			});
-
-			if (!uploadResponse.ok) {
-				throw new Error("Failed to upload image");
-			}
-
 			// Proceed to add the tag
-			const response = await fetch("http://167.172.165.109:8080/api/v1/subjects", {
+			const response = await fetch("http://167.172.165.109:8080/api/v1/admin/tags", {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${authToken}`,
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					title: formData.title,
-					description: formData.description,
-					coverImageId: fileId,
+					name: formData.name,
 				}),
 			});
 
@@ -98,15 +56,8 @@ export const Add = ({ onAddSuccess }) => {
 
 			// Clear form inputs
 			setFormData({
-				title: "",
-				description: "",
-				image: null,
+				name: "",
 			});
-
-			// Reset file input
-			if (fileInputRef.current) {
-				fileInputRef.current.value = "";
-			}
 
 			// Show success toast and close modal
 			toast.success("Tag added successfully!", {
@@ -177,35 +128,12 @@ export const Add = ({ onAddSuccess }) => {
 											<input
 												type="text"
 												className="form-control form-control-solid mb-3 mb-lg-0"
-												name="title"
-												value={formData.title}
+												name="name"
+												value={formData.name}
 												onChange={handleChange}
 											/>
 										</div>
-										<div className="col-md-12 mt-3">
-											<label className="required fs-5 fw-semibold mb-2">
-												Description
-											</label>
-											<input
-												type="text"
-												className="form-control form-control-solid mb-3 mb-lg-0"
-												name="description"
-												value={formData.description}
-												onChange={handleChange}
-											/>
-										</div>
-										<div className="col-md-12 mt-3">
-											<label className="required fs-5 fw-semibold mb-2">
-												Cover Image
-											</label>
-											<input
-												type="file"
-												ref={fileInputRef}
-												onChange={handleFileChange}
-												className="form-control"
-												name="image"
-											/>
-										</div>
+
 										<div className="col-md-12 mt-5 text-center">
 											<button
 												type="submit"

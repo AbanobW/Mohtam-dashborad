@@ -79,7 +79,7 @@ export const Add = ({ onAddSuccess }) => {
 			}
 
 			// Proceed to add the subject
-			const response = await fetch("http://167.172.165.109:8080/api/v1/subjects", {
+			const response = await fetch("http://167.172.165.109:8080/api/v1/admin/subjects", {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${authToken}`,

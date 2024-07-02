@@ -81,7 +81,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	};
 
 	const fetchSubjects = () => {
-		fetch(`http://167.172.165.109:8080/api/v1/subjects`, {
+		fetch(`http://167.172.165.109:8080/api/v1/admin/subjects`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",

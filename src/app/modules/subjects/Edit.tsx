@@ -22,7 +22,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 
 	useEffect(() => {
 		if (subjectId) {
-			fetch(`http://167.172.165.109:8080/api/v1/subjects/${subjectId}`, {
+			fetch(`http://167.172.165.109:8080/api/v1/admin/subjects/${subjectId}`, {
 				headers: {
 					Authorization: `Bearer ${authToken}`,
 					"Content-Type": "application/json",
@@ -133,7 +133,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/subjects/${subjectId}`,
+				`http://167.172.165.109:8080/api/v1/admin/subjects/${subjectId}`,
 				{
 					method: "PUT",
 

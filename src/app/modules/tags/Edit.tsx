@@ -1,28 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { KTIcon } from "../../../_metronic/helpers";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../auth";
 
 type EditProps = {
-	subjectId: string | null;
+	tagId: string | null;
 	onEditSuccess: () => void;
 };
 
-export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
+export const Edit: React.FC<EditProps> = ({ tagId, onEditSuccess }) => {
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 	const [formData, setFormData] = useState({
-		title: "",
-		description: "",
-		coverImageId: "",
+		name: "",
 	});
-	const [imageUrl, setImageUrl] = useState<string | null>(null); // Changed to allow null initially
-	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		if (subjectId) {
-			fetch(`http://167.172.165.109:8080/api/v1/subjects/${subjectId}`, {
+		if (tagId) {
+			fetch(`http://167.172.165.109:8080/api/v1/admin/tags/${tagId}`, {
 				headers: {
 					Authorization: `Bearer ${authToken}`,
 					"Content-Type": "application/json",
@@ -31,30 +27,12 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 				.then((response) => response.json())
 				.then((data) => {
 					setFormData({
-						title: data.title,
-						description: data.description,
-						coverImageId: data.coverImageId,
+						name: data.name,
 					});
-
-					// Fetch the presigned URL for the cover image
-					fetch(
-						`http://167.172.165.109:8080/api/v1/presignedurls/${data.coverImageId}`,
-						{
-							headers: {
-								Authorization: `Bearer ${authToken}`,
-								"Content-Type": "application/json",
-							},
-						}
-					)
-						.then((response) => response.json())
-						.then((imgData) => setImageUrl(imgData.presignedUrl))
-						.catch((error) =>
-							console.error("Error fetching image URL:", error)
-						);
 				})
 				.catch((error) => console.error("Error fetching tag data:", error));
 		}
-	}, [subjectId]);
+	}, [tagId, authToken]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -64,61 +42,11 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 		});
 	};
 
-	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files && e.target.files[0];
-		if (file) {
-			try {
-				// Get presigned URL for uploading
-				const presignedUrlResponse = await fetch(
-					"http://167.172.165.109:8080/api/v1/presignedurls",
-					{
-						method: "POST",
-
-						headers: {
-							Authorization: `Bearer ${authToken}`,
-							"Content-Type": "application/json",
-						},
-					}
-				);
-				if (!presignedUrlResponse.ok) {
-					throw new Error("Failed to get presigned URL");
-				}
-				const presignedUrlData = await presignedUrlResponse.json();
-				const presignedUrl = presignedUrlData.presignedUrl;
-				const fileId = presignedUrlData.fileId;
-
-				// Upload the file using the presigned URL
-				await fetch(presignedUrl, {
-					method: "PUT",
-					body: file,
-				});
-
-				// Update state with the new coverImageId and presignedUrl
-				setFormData({
-					...formData,
-					coverImageId: fileId,
-				});
-				setImageUrl(presignedUrl); // Update imageUrl state with the new URL
-			} catch (error) {
-				console.error("Error uploading image:", error);
-				toast.error("Failed to upload image. Please try again later.", {
-					position: "top-right",
-					autoClose: 3000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-			}
-		}
-	};
-
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		// Check if any field is empty
-		if (!formData.title || !formData.description || !formData.coverImageId) {
+		if (!formData.name) {
 			toast.error("All fields are required. Please fill in all fields.", {
 				position: "top-right",
 				autoClose: 3000,
@@ -133,19 +61,15 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/subjects/${subjectId}`,
+				`http://167.172.165.109:8080/api/v1/admin/tags/${tagId}`,
 				{
 					method: "PUT",
-
 					headers: {
 						Authorization: `Bearer ${authToken}`,
 						"Content-Type": "application/json",
 					},
-
 					body: JSON.stringify({
-						title: formData.title,
-						description: formData.description,
-						coverImageId: formData.coverImageId,
+						name: formData.name,
 					}),
 				}
 			);
@@ -156,15 +80,8 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 
 			// Clear form inputs
 			setFormData({
-				title: "",
-				description: "",
-				coverImageId: "",
+				name: "",
 			});
-
-			// Reset file input
-			if (fileInputRef.current) {
-				fileInputRef.current.value = "";
-			}
 
 			// Show success toast and close modal
 			toast.success("Tag updated successfully!", {
@@ -235,47 +152,12 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 											<input
 												type="text"
 												className="form-control form-control-solid mb-3 mb-lg-0"
-												name="title"
-												value={formData.title}
+												name="name"
+												value={formData.name}
 												onChange={handleChange}
 											/>
 										</div>
-										<div className="col-md-12 mt-3">
-											<label className="required fs-5 fw-semibold mb-2">
-												Description
-											</label>
-											<input
-												type="text"
-												className="form-control form-control-solid mb-3 mb-lg-0"
-												name="description"
-												value={formData.description}
-												onChange={handleChange}
-											/>
-										</div>
-										<div className="col-md-12 mt-3">
-											<label className="required fs-5 fw-semibold mb-2">
-												Cover Image
-											</label>
-											{imageUrl && (
-												<img
-													src={imageUrl}
-													alt="Cover"
-													className="mb-3"
-													style={{
-														width: "100%",
-														maxHeight: "300px",
-														objectFit: "contain",
-													}}
-												/>
-											)}
-											<input
-												type="file"
-												ref={fileInputRef}
-												onChange={handleFileChange}
-												className="form-control"
-												name="coverImage"
-											/>
-										</div>
+
 										<div className="col-md-12 mt-5 text-center">
 											<button
 												type="submit"

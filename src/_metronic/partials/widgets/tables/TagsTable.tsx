@@ -24,31 +24,17 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 	const [items, setItems] = useState<Item[]>([]);
 	const [page, setPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
-	const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(
+	const [selectedTagId, setSelectedTagId] = useState<string | null>(
 		null
 	);
 
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 
-	const fetchPresignedUrl = async (id: string): Promise<string> => {
-		const response = await fetch(
-			`http://167.172.165.109:8080/api/v1/presignedurls/${id}`,
-			{
-				headers: {
-					Authorization: `Bearer ${authToken}`,
-					"Content-Type": "application/json",
-				},
-			}
-		);
-		const data = await response.json();
-		return data.presignedUrl;
-	};
-
 	const fetchSubjects = async (page: number = 0) => {
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/subjects?page=${page}`,
+				`http://167.172.165.109:8080/api/v1/admin/tags?page=${page}`,
 				{
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -58,13 +44,8 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 			);
 			console.log(response);
 			const data = await response.json();
-			const itemsWithUrls = await Promise.all(
-				data.items.map(async (item: Item) => {
-					const presignedUrl = await fetchPresignedUrl(item.coverImageId);
-					return { ...item, coverImageUrl: presignedUrl };
-				})
-			);
-			setItems(itemsWithUrls);
+
+			setItems(data.items);
 			setPage(data.page);
 			setTotalPages(data.totalPages);
 		} catch (error) {
@@ -86,7 +67,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/subjects/${id}`, {
+				fetch(`http://167.172.165.109:8080/api/v1/admin/tags/${id}`, {
 					method: "DELETE",
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -142,8 +123,8 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 							<tr className="fw-bold text-muted bg-light border-none border-bottom">
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-200px">Title</th>
-								<th className="min-w-300px">Description</th>
-								<th className="min-w-100px">Image</th>
+								{/* <th className="min-w-300px">Description</th>
+								<th className="min-w-100px">Image</th> */}
 								<th className="min-w-150px text-end">Actions</th>
 							</tr>
 						</thead>
@@ -163,12 +144,12 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 										<div className="d-flex align-items-center">
 											<div className="d-flex justify-content-start flex-column">
 												<a className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6">
-													{item.title}
+													{item.name}
 												</a>
 											</div>
 										</div>
 									</td>
-									<td>
+									{/* <td>
 										<span className="text-gray-900 fw-bold d-block mb-1 fs-6">
 											{item.description}
 										</span>
@@ -181,13 +162,13 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 										>
 											Preview
 										</a>
-									</td>
+									</td> */}
 									<td className="text-end">
 										<a
 											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
 											data-bs-toggle="modal"
 											data-bs-target="#kt_modal_edit_Sub"
-											onClick={() => setSelectedSubjectId(item.id)}
+											onClick={() => setSelectedTagId(item.id)}
 										>
 											<KTIcon iconName="pencil" className="fs-3" />
 										</a>
@@ -203,7 +184,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 						</tbody>
 					</table>
 					<Edit
-						subjectId={selectedSubjectId}
+						tagId={selectedTagId}
 						onEditSuccess={() => fetchSubjects(page)}
 					/>
 				</div>
