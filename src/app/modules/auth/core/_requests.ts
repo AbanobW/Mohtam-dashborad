@@ -8,9 +8,9 @@ import { AuthModel, UserModel } from "./_models";
 // export const REGISTER_URL = `https://preview.keenthemes.com/metronic8/laravel/api/register`;
 // export const REQUEST_PASSWORD_URL = `https://preview.keenthemes.com/metronic8/laravel/api/forgot_password`;
 
-export const GET_USER_BY_ACCESSTOKEN_URL = `http://167.172.165.109:8080/api/v1/auth/refresh`;
-export const LOGIN_URL = `http://167.172.165.109:8080/api/v1/auth/login`;
-export const REGISTER_URL = `http://167.172.165.109:8080/api/v1/auth/register`;
+export const GET_USER_BY_ACCESSTOKEN_URL = `https://167.172.165.109:8080/api/v1/auth/refresh`;
+export const LOGIN_URL = `https://167.172.165.109:8080/api/v1/auth/login`;
+export const REGISTER_URL = `https://167.172.165.109:8080/api/v1/auth/register`;
 export const REQUEST_PASSWORD_URL = `https://preview.keenthemes.com/metronic8/laravel/api/forgot_password`;
 
 // Server should return AuthModel
