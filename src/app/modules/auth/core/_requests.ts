@@ -19,6 +19,7 @@ export async function login(email: string, password: string): Promise<AuthModel>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
     },
     body: JSON.stringify({
       email,
