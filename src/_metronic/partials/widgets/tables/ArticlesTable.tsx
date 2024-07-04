@@ -40,19 +40,19 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 
 	const navigate = useNavigate();
 
-	const fetchPresignedUrl = async (id: string): Promise<string> => {
-		const response = await fetch(
-			`http://167.172.165.109:8080/api/v1/presignedurls/${id}`,
-			{
-				headers: {
-					Authorization: `Bearer ${authToken}`,
-					"Content-Type": "application/json",
-				},
-			}
-		);
-		const data = await response.json();
-		return data.presignedUrl;
-	};
+	// const fetchPresignedUrl = async (id: string): Promise<string> => {
+	// 	const response = await fetch(
+	// 		`http://167.172.165.109:8080/api/v1/presignedurls/${id}`,
+	// 		{
+	// 			headers: {
+	// 				Authorization: `Bearer ${authToken}`,
+	// 				"Content-Type": "application/json",
+	// 			},
+	// 		}
+	// 	);
+	// 	const data = await response.json();
+	// 	return data.presignedUrl;
+	// };
 
 	const fetchArticles = async (page: number = 0) => {
 		try {
@@ -66,13 +66,14 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 				}
 			);
 			const data = await response.json();
-			const itemsWithUrls = await Promise.all(
-				data.items.map(async (item: any) => {
-					const presignedUrl = await fetchPresignedUrl(item.coverImageId);
-					return { ...item, coverImageUrl: presignedUrl };
-				})
-			);
-			setItems(itemsWithUrls);
+			console.log(data);
+			// const itemsWithUrls = await Promise.all(
+			// 	data.items.map(async (item: any) => {
+			// 		const presignedUrl = await fetchPresignedUrl(item.coverImageId);
+			// 		return { ...item, coverImageUrl: presignedUrl };
+			// 	})
+			// );
+			setItems(data.items);
 			setPage(data.page);
 			setTotalPages(data.totalPages);
 		} catch (error) {
