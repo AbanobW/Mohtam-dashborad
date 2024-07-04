@@ -14,11 +14,25 @@ export const REGISTER_URL = `http://167.172.165.109:8080/api/v1/auth/register`;
 export const REQUEST_PASSWORD_URL = `https://preview.keenthemes.com/metronic8/laravel/api/forgot_password`;
 
 // Server should return AuthModel
-export function login(email: string, password: string) {
-  return axios.post<AuthModel>(LOGIN_URL, {
-    email,
-    password,
+export async function login(email: string, password: string): Promise<AuthModel> {
+  const response = await fetch(LOGIN_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Network response was not ok');
+  }
+
+  const data: AuthModel = await response.json();
+  return data;
 }
 
 // Server should return AuthModel
