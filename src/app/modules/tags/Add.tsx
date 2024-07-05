@@ -15,6 +15,8 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
     name: "",
   });
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
+
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData({
@@ -43,7 +45,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
     try {
       // Proceed to add the tag
       const response = await fetch(
-        "http://167.172.165.109:8080/api/v1/admin/tags",
+        `${apiUrl}/tags`,
         {
           method: "POST",
           headers: {

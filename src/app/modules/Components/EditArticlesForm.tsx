@@ -147,6 +147,8 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
     setSectionImageUrls([...sectionImageUrls, ""]);
   };
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
+
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     setFileId: (fileId: string) => void,
@@ -228,7 +230,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
     try {
       const response = await fetch(
-        `http://167.172.165.109:8080/api/v1/admin/articles/${article.id}`,
+        `${apiUrl}/articles/${article.id}`,
         {
           method: "PUT",
           headers: {

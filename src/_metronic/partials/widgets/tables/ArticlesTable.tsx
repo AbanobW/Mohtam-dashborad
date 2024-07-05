@@ -38,6 +38,8 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 		null
 	);
 
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 	const navigate = useNavigate();
 
 	// const fetchPresignedUrl = async (id: string): Promise<string> => {
@@ -57,7 +59,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	const fetchArticles = async (page: number = 0) => {
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/articles?page=${page}`,
+				`${apiUrl}/articles?page=${page}`,
 				{
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -82,7 +84,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	};
 
 	const fetchSubjects = () => {
-		fetch(`http://167.172.165.109:8080/api/v1/admin/subjects`, {
+		fetch(`${apiUrl}/subjects`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
@@ -110,7 +112,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/articles/${id}`, {
+				fetch(`${apiUrl}/articles/${id}`, {
 					method: "DELETE",
 
 					headers: {
@@ -148,7 +150,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/articles/${id}`, {
+				fetch(`${apiUrl}/articles/${id}`, {
 					method: "PUT",
 					headers: {
 						Authorization: `Bearer ${authToken}`,

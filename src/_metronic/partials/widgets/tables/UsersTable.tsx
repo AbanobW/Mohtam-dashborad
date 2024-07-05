@@ -28,11 +28,13 @@ const UsersTable: React.FC<Props> = () => {
 	const [totalPages, setTotalPages] = useState(0);
 
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 
 	const fetchUsers = async (page: number = 0) => {
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/users?page=${page}`,
+				`${apiUrl}/users?page=${page}`,
 				{
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -63,7 +65,7 @@ const UsersTable: React.FC<Props> = () => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/users/${id}`, {
+				fetch(`${apiUrl}/users/${id}`, {
 					method: "DELETE",
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -98,7 +100,7 @@ const UsersTable: React.FC<Props> = () => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/users/${id}`, {
+				fetch(`${apiUrl}/users/${id}`, {
 					method: "PUT",
 					headers: {
 						Authorization: `Bearer ${authToken}`,

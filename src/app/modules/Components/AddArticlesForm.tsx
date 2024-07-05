@@ -56,11 +56,13 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);
 
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 	useEffect(() => {
 		const fetchSubjects = async () => {
 			try {
 				const response = await fetch(
-					"http://167.172.165.109:8080/api/v1/admin/subjects",
+					`${apiUrl}/subjects`,
 					{
 						headers: {
 							Authorization: `Bearer ${authToken}`,
@@ -80,7 +82,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		const fetchTags = async () => {
 			try {
 				const response = await fetch(
-					"http://167.172.165.109:8080/api/v1/admin/tags",
+					`${apiUrl}/tags`,
 					{
 						headers: {
 							Authorization: `Bearer ${authToken}`,
@@ -189,7 +191,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 
 		try {
 			const response = await fetch(
-				"http://167.172.165.109:8080/api/v1/admin/articles",
+				`${apiUrl}/articles`,
 				{
 					method: "POST",
 					headers: {

@@ -16,9 +16,11 @@ export const Edit: React.FC<EditProps> = ({ tagId, onEditSuccess }) => {
 		name: "",
 	});
 
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 	useEffect(() => {
 		if (tagId) {
-			fetch(`http://167.172.165.109:8080/api/v1/admin/tags/${tagId}`, {
+			fetch(`${apiUrl}/tags/${tagId}`, {
 				headers: {
 					Authorization: `Bearer ${authToken}`,
 					"Content-Type": "application/json",
@@ -61,7 +63,7 @@ export const Edit: React.FC<EditProps> = ({ tagId, onEditSuccess }) => {
 
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/tags/${tagId}`,
+				`${apiUrl}/tags/${tagId}`,
 				{
 					method: "PUT",
 					headers: {

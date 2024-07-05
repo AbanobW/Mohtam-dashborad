@@ -30,6 +30,8 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 
 	// const fetchPresignedUrl = async (id: string): Promise<string> => {
 	// 	const response = await fetch(
@@ -48,7 +50,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const fetchSubjects = async (page: number = 0) => {
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/subjects?page=${page}`,
+				`${apiUrl}/subjects?page=${page}`,
 				{
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -86,7 +88,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/subjects/${id}`, {
+				fetch(`${apiUrl}/subjects/${id}`, {
 					method: "DELETE",
 					headers: {
 						Authorization: `Bearer ${authToken}`,

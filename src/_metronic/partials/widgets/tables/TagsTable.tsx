@@ -30,11 +30,13 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 
 	const fetchSubjects = async (page: number = 0) => {
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/tags?page=${page}`,
+				`${apiUrl}/tags?page=${page}`,
 				{
 					headers: {
 						Authorization: `Bearer ${authToken}`,
@@ -67,7 +69,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 			cancelButtonText: "Cancel",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://167.172.165.109:8080/api/v1/admin/tags/${id}`, {
+				fetch(`${apiUrl}/tags/${id}`, {
 					method: "DELETE",
 					headers: {
 						Authorization: `Bearer ${authToken}`,

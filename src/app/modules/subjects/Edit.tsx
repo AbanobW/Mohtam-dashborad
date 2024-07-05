@@ -20,9 +20,11 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null); // Changed to allow null initially
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
+	const apiUrl = import.meta.env.VITE_APP_API_URL;
+
 	useEffect(() => {
 		if (subjectId) {
-			fetch(`http://167.172.165.109:8080/api/v1/admin/subjects/${subjectId}`, {
+			fetch(`${apiUrl}/subjects/${subjectId}`, {
 				headers: {
 					Authorization: `Bearer ${authToken}`,
 					"Content-Type": "application/json",
@@ -133,7 +135,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 
 		try {
 			const response = await fetch(
-				`http://167.172.165.109:8080/api/v1/admin/subjects/${subjectId}`,
+				`${apiUrl}/subjects/${subjectId}`,
 				{
 					method: "PUT",
 
