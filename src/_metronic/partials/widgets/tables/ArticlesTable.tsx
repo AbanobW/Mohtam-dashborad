@@ -68,7 +68,6 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 				}
 			);
 			const data = await response.json();
-			console.log(data);
 			// const itemsWithUrls = await Promise.all(
 			// 	data.items.map(async (item: any) => {
 			// 		const presignedUrl = await fetchPresignedUrl(item.coverImageId);

@@ -8,7 +8,6 @@ export function useAuthenticatedRequest() {
     const API_URL = process.env.VITE_APP_API_URL || '';
     const { auth } = useAuth();
     const authToken = auth?.accessToken;
-    console.log("dsada"+authToken);
 
     const postRequest = (url: string, data: any = {}, params: any = {}, method: any = 'POST') => {
         const config: AxiosRequestConfig = {

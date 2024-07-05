@@ -58,7 +58,6 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 					},
 				}
 			);
-			console.log(response);
 			const data = await response.json();
 			// const itemsWithUrls = await Promise.all(
 			// 	data.items.map(async (item: Item) => {

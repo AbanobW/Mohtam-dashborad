@@ -203,7 +203,6 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 			);
 
 			const responseData = await response.json();
-			console.log("Response data:", responseData);
 
 			if (response.ok) {
 				toast.success("Article added successfully!");

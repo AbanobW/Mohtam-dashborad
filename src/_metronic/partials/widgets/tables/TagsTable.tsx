@@ -44,7 +44,6 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 					},
 				}
 			);
-			console.log(response);
 			const data = await response.json();
 
 			setItems(data.items);
