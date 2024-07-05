@@ -31,6 +31,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
+	const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
 
 	// const fetchPresignedUrl = async (id: string): Promise<string> => {
@@ -144,7 +145,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-200px">Title</th>
 								<th className="min-w-300px">Description</th>
-								<th className="min-w-100px">Image</th>
+								{/* <th className="min-w-100px">Image</th> */}
 								<th className="min-w-150px text-end">Actions</th>
 							</tr>
 						</thead>
@@ -174,16 +175,24 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 											{item.description}
 										</span>
 									</td>
-									<td>
+									{/* <td>
 										<a
-											href={item.coverImageUrl}
+											href={imgUrl + item.coverImageUrl}
 											className="btn-light-primary fw-bold d-block mb-1 fs-6"
 											target="blank"
 										>
 											Preview
 										</a>
-									</td>
+									</td> */}
 									<td className="text-end">
+									<a
+											href={ item.coverImageUrl}
+											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+											target="_blank"
+
+										>
+											<KTIcon iconName="eye" className="fs-3" />
+										</a>
 										<a
 											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
 											data-bs-toggle="modal"

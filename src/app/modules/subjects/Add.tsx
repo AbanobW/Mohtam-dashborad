@@ -63,7 +63,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 		try {
 			// Request presigned URL and file ID
 			const presignedUrlResponse = await fetch(
-				"http://167.172.165.109:8080/api/v1/presignedurls",
+				`${apiUrl}/presignedurls`,
 				{
 					method: "POST",
 					headers: {
@@ -80,6 +80,8 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			const presignedUrlData = await presignedUrlResponse.json();
 			const presignedUrl = presignedUrlData.presignedUrl;
 			const fileId = presignedUrlData.fileId;
+			const imgUrl = import.meta.env.VITE_APP_Img_URL;
+
 
 			// Upload the image using the presigned URL
 			const uploadResponse = await fetch(presignedUrl, {
@@ -101,7 +103,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 				body: JSON.stringify({
 					title: formData.title,
 					description: formData.description,
-					coverImageId: fileId,
+					coverImageUrl: imgUrl + fileId,
 				}),
 			});
 

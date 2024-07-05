@@ -22,10 +22,10 @@ type Section = {
 type Article = {
 	title: string;
 	summary: string;
-	coverImageId: string;
+	coverImageUrl: string;
 	sections: Section[];
 	subjectId: string;
-	tagIds: string[];
+	tags: string[];
 	published: boolean;
 };
 
@@ -46,15 +46,17 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const [title, setTitle] = useState<string>("");
 	const [summary, setSummary] = useState<string>("");
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-	const [coverImageId, setCoverImageId] = useState<string>("");
+	const [coverImageUrl, setcoverImageUrl] = useState<string>("");
 	const [subjectId, setSubjectId] = useState<string>("");
-	const [tagIds, setTagIds] = useState<string[]>([]);
+	// const [tagIds, setTagIds] = useState<string[]>([]);
 	const [published, setPublished] = useState<boolean>(true);
 	const [sections, setSections] = useState<Section[]>([
 		{ order: 0, content: "", fileId: null },
 	]);
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);
+	const [tagOptions, setTagOptions] = useState<Tag[]>([]);
+
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 
@@ -92,7 +94,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				);
 				const data = await response.json();
 				console.log("Fetched tags:", data);
-				setTags(data.items || []);
+				setTagOptions(data.items || []);
 			} catch (error) {
 				console.error("Error fetching tags:", error);
 				toast.error("Failed to fetch tags.");
@@ -115,20 +117,20 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const addSection = () => {
 		setSections([
 			...sections,
-			{ order: sections.length, content: "", fileId: null },
+			{ order: sections.length, content: "", fileUrl: null },
 		]);
 	};
 
 	const handleFileChange = async (
 		e: React.ChangeEvent<HTMLInputElement>,
-		setFileId: (fileId: string) => void
+		setFileId: (fileUrl: string) => void
 	) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
 			try {
 				// Request a presigned URL
 				const presignedUrlResponse = await fetch(
-					"http://167.172.165.109:8080/api/v1/presignedurls",
+					`${apiUrl}/presignedurls`,
 					{
 						method: "POST",
 						headers: {
@@ -138,7 +140,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					}
 				);
 				const presignedUrlData = await presignedUrlResponse.json();
-				const { presignedUrl, fileId } = presignedUrlData;
+				const { presignedUrl, fileUrl } = presignedUrlData;
 
 				// Upload the file to the presigned URL
 				await fetch(presignedUrl, {
@@ -147,7 +149,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				});
 
 				// Update the fileId state
-				setFileId(fileId);
+				setFileId(fileUrl);
 			} catch (error) {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
@@ -156,22 +158,22 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	};
 
 	const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		handleFileChange(e, setCoverImageId);
+		handleFileChange(e, setcoverImageUrl);
 	};
 
 	const handleSectionFileChange = (index: number) => (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
-		handleFileChange(e, (fileId: string) => {
+		handleFileChange(e, (fileUrl: string) => {
 			const newSections = [...sections];
-			newSections[index].fileId = fileId;
+			newSections[index].fileUrl = fileUrl;
 			setSections(newSections);
 		});
 	};
 
 	const handleTagChange = (selectedOptions: any) => {
-		const selectedTagIds = selectedOptions.map((option: any) => option.value);
-		setTagIds(selectedTagIds);
+		const selectedTagIds = selectedOptions.map((option: any) => option.label);
+		setTags(selectedTagIds);
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -180,10 +182,10 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		const article: Article = {
 			title,
 			summary,
-			coverImageId,
+			coverImageUrl,
 			sections,
 			subjectId,
-			tagIds,
+			tags,
 			published,
 		};
 
@@ -209,11 +211,11 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				setTitle("");
 				setSummary("");
 				setCoverImageFile(null);
-				setCoverImageId("");
+				setcoverImageUrl("");
 				setSubjectId("");
-				setTagIds([]);
+				setTags([]);
 				setPublished(false);
-				setSections([{ order: 0, content: "", fileId: null }]);
+				setSections([{ order: 0, content: "", fileUrl: null }]);
 			} else {
 				console.error("Error adding article:", responseData);
 				toast.error("Failed to add article.");
@@ -308,7 +310,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						<Select
 							isMulti
 							name="tags"
-							options={tags.map((tag) => ({ value: tag.id, label: tag.name }))}
+							options={tagOptions.map((tag) => ({ value: tag.id, label: tag.name }))}
 							className="basic-multi-select"
 							classNamePrefix="select"
 							onChange={handleTagChange}

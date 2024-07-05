@@ -15,12 +15,14 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
-		coverImageId: "",
+		coverImageUrl: "",
 	});
 	const [imageUrl, setImageUrl] = useState<string | null>(null); // Changed to allow null initially
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
+	const imgUrl = import.meta.env.VITE_APP_Img_URL;
+
 
 	useEffect(() => {
 		if (subjectId) {
@@ -35,12 +37,12 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 					setFormData({
 						title: data.title,
 						description: data.description,
-						coverImageId: data.coverImageId,
+						coverImageUrl: data.coverImageUrl,
 					});
 
 					// Fetch the presigned URL for the cover image
 					fetch(
-						`http://167.172.165.109:8080/api/v1/presignedurls/${data.coverImageId}`,
+						`${apiUrl}/presignedurls/${data.coverImageUrl}`,
 						{
 							headers: {
 								Authorization: `Bearer ${authToken}`,
@@ -72,7 +74,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 			try {
 				// Get presigned URL for uploading
 				const presignedUrlResponse = await fetch(
-					"http://167.172.165.109:8080/api/v1/presignedurls",
+					`${apiUrl}/presignedurls`,
 					{
 						method: "POST",
 
@@ -95,10 +97,10 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 					body: file,
 				});
 
-				// Update state with the new coverImageId and presignedUrl
+				// Update state with the new coverImageUrl and presignedUrl
 				setFormData({
 					...formData,
-					coverImageId: fileId,
+					coverImageUrl: imgUrl + fileId,
 				});
 				setImageUrl(presignedUrl); // Update imageUrl state with the new URL
 			} catch (error) {
@@ -120,7 +122,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 		e.preventDefault();
 
 		// Check if any field is empty
-		if (!formData.title || !formData.description || !formData.coverImageId) {
+		if (!formData.title || !formData.description || !formData.coverImageUrl) {
 			toast.error("All fields are required. Please fill in all fields.", {
 				position: "top-right",
 				autoClose: 3000,
@@ -147,7 +149,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 					body: JSON.stringify({
 						title: formData.title,
 						description: formData.description,
-						coverImageId: formData.coverImageId,
+						coverImageUrl: formData.coverImageUrl,
 					}),
 				}
 			);
@@ -160,7 +162,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 			setFormData({
 				title: "",
 				description: "",
-				coverImageId: "",
+				coverImageUrl: "",
 			});
 
 			// Reset file input

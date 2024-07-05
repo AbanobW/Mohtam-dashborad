@@ -39,6 +39,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	);
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
+	const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
 	const navigate = useNavigate();
 
@@ -58,15 +59,12 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 
 	const fetchArticles = async (page: number = 0) => {
 		try {
-			const response = await fetch(
-				`${apiUrl}/articles?page=${page}`,
-				{
-					headers: {
-						Authorization: `Bearer ${authToken}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			const response = await fetch(`${apiUrl}/articles?page=${page}`, {
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+					"Content-Type": "application/json",
+				},
+			});
 			const data = await response.json();
 			// const itemsWithUrls = await Promise.all(
 			// 	data.items.map(async (item: any) => {
@@ -211,9 +209,9 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 								<th className="min-w-250px">Title</th>
 								<th className="min-w-300px">Summary</th>
 								<th className="min-w-200px">Subject</th>
-								<th className="min-w-50px">Cover Image</th>
+								{/* <th className="min-w-50px">Cover Image</th> */}
 								<th className="min-w-50px">Published</th>
-								<th className="min-w-150px text-end">Actions</th>
+								<th className="min-w-200px text-end">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -255,25 +253,37 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 										</span>
 									</td>
 									{/* Cover Image */}
-									<td>
+									{/* <td>
 										<a
-											href={item.coverImageUrl}
+											href={imgUrl + item.coverImageUrl}
 											className="btn-light-primary fw-bold d-block mb-1 fs-6"
 											target="_blank"
 											rel="noopener noreferrer"
 										>
 											Preview
 										</a>
-									</td>
+									</td> */}
 									{/* Published */}
 									<td>
 										{item.published ? (
-											<span className="badge badge-light-success fs-6">Published</span>
+											<span className="badge badge-light-success fs-6">
+												Published
+											</span>
 										) : (
-											<span className="badge badge-light-danger fs-6">Unpublished</span>
+											<span className="badge badge-light-danger fs-6">
+												Unpublished
+											</span>
 										)}
 									</td>
 									<td className="text-end">
+										<a
+											href={imgUrl + item.coverImageUrl}
+											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+											target="_blank"
+
+										>
+											<KTIcon iconName="eye" className="fs-3" />
+										</a>
 										<a
 											href="#"
 											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
