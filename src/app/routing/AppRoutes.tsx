@@ -31,16 +31,6 @@ const AppRoutes: FC = () => {
 		<BrowserRouter basename={BASE_URL}>
 			<Routes>
 				<Route element={<App />}>
-				<Route path="/*" element={<PrivateRoutes />} />
-							<Route index element={<Navigate to="/dashboard" />} />
-							<Route path="users" element={<UsersWrapper />} />
-							<Route path="tags" element={<TagsWrapper />} />
-							<Route path="subjects" element={<SubjectsWrapper />} />
-							<Route path="articles" element={<ArticlesWrapper />} />
-							<Route path="addArticle" element={<AddArticlesWrapper />} />
-							<Route path="editArticle" element={<EditArticlesWrapper />} />
-							<Route path="error/*" element={<ErrorsPage />} />
-							<Route path="logout" element={<Logout />} />
 					{currentUser ? (
 						<>
 							<Route path="/*" element={<PrivateRoutes />} />
