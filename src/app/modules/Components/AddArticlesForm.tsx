@@ -117,13 +117,13 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const addSection = () => {
 		setSections([
 			...sections,
-			{ order: sections.length, content: "", fileUrl: null },
+			{ order: sections.length, content: "", fileId: null },
 		]);
 	};
 
 	const handleFileChange = async (
 		e: React.ChangeEvent<HTMLInputElement>,
-		setFileId: (fileUrl: string) => void
+		setFileId: (fileId: string) => void
 	) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
@@ -140,7 +140,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					}
 				);
 				const presignedUrlData = await presignedUrlResponse.json();
-				const { presignedUrl, fileUrl } = presignedUrlData;
+				const { presignedUrl, fileId } = presignedUrlData;
 
 				// Upload the file to the presigned URL
 				await fetch(presignedUrl, {
@@ -149,7 +149,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				});
 
 				// Update the fileId state
-				setFileId(fileUrl);
+				setFileId(fileId);
 			} catch (error) {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
@@ -164,9 +164,9 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const handleSectionFileChange = (index: number) => (
 		e: React.ChangeEvent<HTMLInputElement>
 	) => {
-		handleFileChange(e, (fileUrl: string) => {
+		handleFileChange(e, (fileId: string) => {
 			const newSections = [...sections];
-			newSections[index].fileUrl = fileUrl;
+			newSections[index].fileId = fileId;
 			setSections(newSections);
 		});
 	};
@@ -215,7 +215,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				setSubjectId("");
 				setTags([]);
 				setPublished(false);
-				setSections([{ order: 0, content: "", fileUrl: null }]);
+				setSections([{ order: 0, content: "", fileId: null }]);
 			} else {
 				console.error("Error adding article:", responseData);
 				toast.error("Failed to add article.");

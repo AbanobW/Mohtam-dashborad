@@ -39,7 +39,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	);
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
-	const imgUrl = import.meta.env.VITE_APP_Img_URL;
+	// const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
 	const navigate = useNavigate();
 
@@ -277,7 +277,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 									</td>
 									<td className="text-end">
 										<a
-											href={imgUrl + item.coverImageUrl}
+											href={ item.coverImageUrl}
 											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
 											target="_blank"
 
