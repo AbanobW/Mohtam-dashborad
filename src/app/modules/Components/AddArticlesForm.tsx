@@ -56,6 +56,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [tags, setTags] = useState<string[]>([]);
 	const [tagOptions, setTagOptions] = useState<Tag[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
@@ -125,6 +126,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
+			setLoading(true);
 			try {
 				// Request a presigned URL
 				const presignedUrlResponse = await fetch(
@@ -149,6 +151,8 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 			} catch (error) {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
+			} finally {
+				setLoading(false);
 			}
 		}
 	};
@@ -289,12 +293,15 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						</select>
 					</div>
 					<div className="mb-4 col-12 col-md-6">
-						<label className="fs-5 fw-semibold mb-2">Cover Image</label>
+						<label className="fs-5 fw-semibold mb-2">Cover Image {loading && (
+							<div className="loader mt-2"></div>
+						)}</label>
 						<input
 							type="file"
 							className="form-control"
 							onChange={handleCoverImageChange}
 						/>
+						
 					</div>
 
 					<div className="mb-4 col-12 col-md-6">
@@ -331,7 +338,6 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 
 					<hr className="my-10"></hr>
 
-
 					<div className="col-12">
 						<h4 className="mb-3">Sections</h4>
 						{sections.map((section, index) => (
@@ -360,13 +366,16 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 									formats={formats}
 								/>
 								<label className="fs-5 fw-semibold mb-2 mt-2">
-									Image
+									Image {loading && (
+									<div className="loader mt-2"></div>
+								)}
 								</label>
 								<input
 									type="file"
 									className="form-control"
 									onChange={handleSectionFileChange(index)}
 								/>
+								
 							</div>
 						))}
 						<button
@@ -391,3 +400,25 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 };
 
 export { AddArticlesForm };
+
+{/* <style>
+	.loader {
+		width: 48px;
+		height: 48px;
+		border: 5px solid #FFF;
+		border-bottom-color: #FF3D00;
+		border-radius: 50%;
+		display: inline-block;
+		box-sizing: border-box;
+		animation: rotation 1s linear infinite;
+	}
+
+	@keyframes rotation {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style> */}
