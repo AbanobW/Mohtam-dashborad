@@ -54,7 +54,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
   const [sections, setSections] = useState<Section[]>(
     articleData?.sections || [{ order: 0, content: "", fileId: null }]
   );
-  const [sectionImageUrls, setSectionImageUrls] = useState<string[]>([]);
+  const [sectionImageUrls, setSectionImageUrls] = useState<string[]>([]); 
   const [subjects, setSubjects] = useState<Subject[]>([]);
 
   const apiUrl = import.meta.env.VITE_APP_API_URL;
