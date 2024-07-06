@@ -25,23 +25,28 @@ const StatisticsWidget5: React.FC<Props> = ({
 	descriptionColor,
 	link,
 }) => {
-	return (
-		<Link to={link} className={`card bg-${color} hoverable ${className}`}>
-			<div className="card-body">
-				<KTIcon
-					iconName={svgIcon}
-					className={`text-${iconColor} fs-3x ms-n1`}
-				/>
+	const cardContent = (
+		<div className="card-body">
+			<KTIcon iconName={svgIcon} className={`text-${iconColor} fs-3x ms-n1`} />
 
-				<div className={`text-${titleColor} fw-bold fs-2 mb-2 mt-5`}>
-					{title}
-				</div>
-
-				<div className={`fw-semibold text-${descriptionColor}`}>
-					{description}
-				</div>
+			<div className={`text-${titleColor ?? "white"} fw-bold fs-2 mb-2 mt-5`}>
+				{title}
 			</div>
+
+			<div className={`fw-semibold text-${descriptionColor ?? "white"}`}>
+				{description}
+			</div>
+		</div>
+	);
+
+	return link ? (
+		<Link to={link} className={`card bg-${color} hoverable ${className}`}>
+			{cardContent}
 		</Link>
+	) : (
+		<div className={`card bg-${color} ${className}`}>
+			{cardContent}
+		</div>
 	);
 };
 
