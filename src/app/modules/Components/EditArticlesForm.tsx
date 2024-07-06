@@ -72,6 +72,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [tags, setTags] = useState<string[]>(articleData?.tags || []);
 	const [tagOptions, setTagOptions] = useState<Tag[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
@@ -136,6 +137,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
 			try {
+				setLoading(true);
 				const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
 					method: "POST",
 					headers: {
@@ -151,9 +153,11 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 					body: file,
 				});
 				setFileId(fileId);
+				setLoading(false);
 			} catch (error) {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
+				setLoading(false);
 			}
 		}
 	};
@@ -310,7 +314,9 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 								className="form-control"
 								id="coverImage"
 								onChange={handleCoverImageChange}
+								disabled={loading}
 							/>
+							{loading && <div>Loading...</div>}
 							{coverImageUrl && (
 								<img
 									src={coverImageUrl}
@@ -369,7 +375,9 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 											type="file"
 											className="form-control"
 											onChange={handleSectionFileChange(index)}
+											disabled={loading}
 										/>
+										{loading && <div>Loading...</div>}
 										{section.fileUrl && (
 											<img
 												src={section.fileUrl}
@@ -384,13 +392,14 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 								type="button"
 								className="btn btn-secondary"
 								onClick={addSection}
+								disabled={loading}
 							>
 								Add Section
 							</button>
 						</div>
 
 						<div className="col-12">
-							<button type="submit" className="btn btn-primary">
+							<button type="submit" className="btn btn-primary" disabled={loading}>
 								Save Article
 							</button>
 						</div>
