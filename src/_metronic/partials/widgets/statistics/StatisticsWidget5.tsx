@@ -1,5 +1,6 @@
 import React from "react";
 import { KTIcon } from "../../../helpers";
+import { Link } from "react-router-dom";
 
 type Props = {
 	className: string;
@@ -25,7 +26,7 @@ const StatisticsWidget5: React.FC<Props> = ({
 	link,
 }) => {
 	return (
-		<a href={link} className={`card bg-${color} hoverable ${className}`}>
+		<Link to={link} className={`card bg-${color} hoverable ${className}`}>
 			<div className="card-body">
 				<KTIcon
 					iconName={svgIcon}
@@ -40,7 +41,7 @@ const StatisticsWidget5: React.FC<Props> = ({
 					{description}
 				</div>
 			</div>
-		</a>
+		</Link>
 	);
 };
 
