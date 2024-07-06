@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { KTIcon } from "../../../helpers";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -194,10 +194,10 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 					<span className="card-label fw-bold fs-3 mb-1">Articles</span>
 				</h3>
 				<div className="card-toolbar">
-					<a className="btn btn-sm btn-light-primary" href="/addArticle">
+					<Link className="btn btn-sm btn-light-primary" to="/addArticle">
 						<KTIcon iconName="plus" className="fs-2" />
 						Add New Article
-					</a>
+					</Link>
 				</div>
 			</div>
 			<div className="card-body py-3">
