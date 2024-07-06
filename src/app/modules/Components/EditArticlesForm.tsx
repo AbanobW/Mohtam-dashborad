@@ -57,11 +57,14 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
   const [sectionImageUrls, setSectionImageUrls] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
 
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
+
+
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
         const response = await fetch(
-          "http://167.172.165.109:8080/api/v1/subjects",
+          `${apiUrl}/subjects`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
@@ -81,7 +84,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
       if (coverImageId) {
         try {
           const response = await fetch(
-            `http://167.172.165.109:8080/api/v1/presignedurls/${coverImageId}`,
+            `${apiUrl}/presignedurls/${coverImageId}`,
             {
               headers: {
                 Authorization: `Bearer ${authToken}`,
@@ -104,7 +107,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
           if (section.fileId) {
             try {
               const response = await fetch(
-                `http://167.172.165.109:8080/api/v1/presignedurls/${section.fileId}`,
+                `${apiUrl}/presignedurls/${section.fileId}`,
                 {
                   headers: {
                     Authorization: `Bearer ${authToken}`,
@@ -147,7 +150,6 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
     setSectionImageUrls([...sectionImageUrls, ""]);
   };
 
-  const apiUrl = import.meta.env.VITE_APP_API_URL;
 
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -159,7 +161,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
       try {
         // Request a presigned URL
         const presignedUrlResponse = await fetch(
-          "http://167.172.165.109:8080/api/v1/presignedurls",
+          `${apiUrl}/presignedurls`,
           {
             method: "POST",
             headers: {

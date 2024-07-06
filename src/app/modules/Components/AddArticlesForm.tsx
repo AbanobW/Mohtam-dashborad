@@ -16,7 +16,8 @@ type Props = {
 type Section = {
 	order: number;
 	content: string;
-	fileId: string | null;
+	fileUrl: string | null;
+	fileType: string;
 };
 
 type Article = {
@@ -46,19 +47,18 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const [title, setTitle] = useState<string>("");
 	const [summary, setSummary] = useState<string>("");
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-	const [coverImageUrl, setcoverImageUrl] = useState<string>("");
+	const [coverImageUrl, setCoverImageUrl] = useState<string>("");
 	const [subjectId, setSubjectId] = useState<string>("");
-	// const [tagIds, setTagIds] = useState<string[]>([]);
 	const [published, setPublished] = useState<boolean>(true);
 	const [sections, setSections] = useState<Section[]>([
-		{ order: 0, content: "", fileId: null },
+		{ order: 0, content: "", fileUrl: null, fileType: "IMAGE" },
 	]);
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);
 	const [tagOptions, setTagOptions] = useState<Tag[]>([]);
 
-
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
+	const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
 	useEffect(() => {
 		const fetchSubjects = async () => {
@@ -73,7 +73,6 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					}
 				);
 				const data = await response.json();
-				console.log("Fetched subjects:", data);
 				setSubjects(data.items || []);
 			} catch (error) {
 				console.error("Error fetching subjects:", error);
@@ -93,7 +92,6 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					}
 				);
 				const data = await response.json();
-				console.log("Fetched tags:", data);
 				setTagOptions(data.items || []);
 			} catch (error) {
 				console.error("Error fetching tags:", error);
@@ -117,7 +115,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const addSection = () => {
 		setSections([
 			...sections,
-			{ order: sections.length, content: "", fileId: null },
+			{ order: sections.length, content: "", fileUrl: null, fileType: "IMAGE" },
 		]);
 	};
 
@@ -147,8 +145,6 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					method: "PUT",
 					body: file,
 				});
-
-				// Update the fileId state
 				setFileId(fileId);
 			} catch (error) {
 				console.error("Error uploading file:", error);
@@ -158,7 +154,9 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	};
 
 	const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		handleFileChange(e, setcoverImageUrl);
+		handleFileChange(e, (fileId: string) => {
+			setCoverImageUrl(`${imgUrl}${fileId}`);
+		});
 	};
 
 	const handleSectionFileChange = (index: number) => (
@@ -166,7 +164,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	) => {
 		handleFileChange(e, (fileId: string) => {
 			const newSections = [...sections];
-			newSections[index].fileId = fileId;
+			newSections[index].fileUrl = `${imgUrl}${fileId}`;
 			setSections(newSections);
 		});
 	};
@@ -211,11 +209,11 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				setTitle("");
 				setSummary("");
 				setCoverImageFile(null);
-				setcoverImageUrl("");
+				setCoverImageUrl("");
 				setSubjectId("");
 				setTags([]);
 				setPublished(false);
-				setSections([{ order: 0, content: "", fileId: null }]);
+				setSections([{ order: 0, content: "", fileUrl: null, fileType: "IMAGE" }]);
 			} else {
 				console.error("Error adding article:", responseData);
 				toast.error("Failed to add article.");
@@ -280,7 +278,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 							value={subjectId}
 							onChange={(e) => setSubjectId(e.target.value)}
 							required
-							>
+						>
 							<option value="">Select a subject</option>
 							{Array.isArray(subjects) &&
 								subjects.map((subject) => (
@@ -290,15 +288,11 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 								))}
 						</select>
 					</div>
-
 					<div className="mb-4 col-12 col-md-6">
-						<label htmlFor="coverImageFile" className="fs-5 fw-semibold mb-2">
-							Cover Image
-						</label>
+						<label className="fs-5 fw-semibold mb-2">Cover Image</label>
 						<input
 							type="file"
 							className="form-control"
-							id="coverImageFile"
 							onChange={handleCoverImageChange}
 						/>
 					</div>
@@ -310,7 +304,10 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						<Select
 							isMulti
 							name="tags"
-							options={tagOptions.map((tag) => ({ value: tag.id, label: tag.name }))}
+							options={tagOptions.map((tag) => ({
+								value: tag.id,
+								label: tag.name,
+							}))}
 							className="basic-multi-select"
 							classNamePrefix="select"
 							onChange={handleTagChange}
@@ -333,82 +330,64 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					</div>
 
 					<hr className="my-10"></hr>
-					<div className="mb-4 mt-5">
-					<h3 className="">Sections</h3>
-					{sections.map((section, index) => (
-						<div key={index} className="my-3 row">
-							<div className="mb-4 col-12 col-md-6">
-								<label
-									htmlFor={`order-${index}`}
-									className="fs-5 fw-semibold mb-2"
-								>
+
+
+					<div className="col-12">
+						<h4 className="mb-3">Sections</h4>
+						{sections.map((section, index) => (
+							<div key={index} className="mb-4">
+								<label className="fs-5 fw-semibold mb-2">
 									Order
 								</label>
 								<input
 									type="number"
-									className="form-control mb-1"
-									id={`order-${index}`}
-									placeholder="Order"
+									className="form-control mb-2"
 									value={section.order}
 									onChange={(e) =>
 										handleSectionChange(index, "order", e.target.value)
 									}
 									required
 								/>
-							</div>
-							<div className="mb-4 col-12 col-md-6">
-								<label
-									htmlFor={`fileId-${index}`}
-									className="fs-5 fw-semibold mb-2"
-								>
-									File
-								</label>
-								<input
-									type="file"
-									className="form-control mb-1"
-									id={`fileId-${index}`}
-									placeholder="File"
-									onChange={handleSectionFileChange(index)}
-									required
-								/>
-							</div>
-							<div className="mb-4 col-12">
-								<label
-									htmlFor={`content-${index}`}
-									className="fs-5 fw-semibold mb-2"
-								>
+								<label className="fs-5 fw-semibold mb-2">
 									Content
 								</label>
 								<ReactQuill
-									id={`content-${index}`}
 									value={section.content}
-									onChange={(value: string) =>
-										handleSectionChange(index, "content", value)
+									onChange={(content) =>
+										handleSectionChange(index, "content", content)
 									}
 									modules={modules}
 									formats={formats}
-									className="mb-1"
-									theme="snow"
+								/>
+								<label className="fs-5 fw-semibold mb-2 mt-2">
+									Image
+								</label>
+								<input
+									type="file"
+									className="form-control"
+									onChange={handleSectionFileChange(index)}
 								/>
 							</div>
-						</div>
-					))}
-					<button
-						type="button"
-						className="btn btn-secondary"
-						onClick={addSection}
-					>
-						Add Section
-					</button>
-				</div>
-				<button type="submit" className="btn btn-primary">
-					Submit
-				</button>
-			</form>
-		</div>
-		<ToastContainer />
-	</div>
-);
+						))}
+						<button
+							type="button"
+							className="btn btn-primary mb-4"
+							onClick={addSection}
+						>
+							Add Section
+						</button>
+					</div>
+					<div className="col-12 text-end">
 
+					<button type="submit" className="btn btn-primary">
+						Add Article
+					</button>
+					</div>
+				</form>
+			</div>
+			<ToastContainer />
+		</div>
+	);
 };
+
 export { AddArticlesForm };
