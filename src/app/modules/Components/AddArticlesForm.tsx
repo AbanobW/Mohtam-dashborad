@@ -54,7 +54,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		{ order: 0, content: "", fileUrl: null, fileType: "IMAGE" },
 	]);
 	const [subjects, setSubjects] = useState<Subject[]>([]);
-	const [tags, setTags] = useState<Tag[]>([]);
+	const [tags, setTags] = useState<string[]>([]);
 	const [tagOptions, setTagOptions] = useState<Tag[]>([]);
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
@@ -170,7 +170,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	};
 
 	const handleTagChange = (selectedOptions: any) => {
-		const selectedTagIds = selectedOptions.map((option: any) => option.label);
+		const selectedTagIds = selectedOptions.map((option: any) => option.value);
 		setTags(selectedTagIds);
 	};
 
