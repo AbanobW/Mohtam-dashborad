@@ -17,6 +17,7 @@ import { AddArticlesWrapper } from "../modules/articles/Add";
 import { EditArticlesWrapper } from "../modules/articles/Edit";
 import { UsersWrapper } from "../modules/users/users";
 import { TagsWrapper } from "../modules/tags/tags";
+import { ChatWrapper } from "../modules/chat/chat";
 
 /**
  * Base URL of the website.
@@ -35,6 +36,7 @@ const AppRoutes: FC = () => {
 						<>
 							<Route path="/*" element={<PrivateRoutes />} />
 							<Route index element={<Navigate to="/dashboard" />} />
+							<Route path="chat" element={<ChatWrapper />} />
 							<Route path="users" element={<UsersWrapper />} />
 							<Route path="tags" element={<TagsWrapper />} />
 							<Route path="subjects" element={<SubjectsWrapper />} />

@@ -16,6 +16,8 @@ const DashboardPage = () => {
 
 	return (
 		<>
+		<div className="js-widget echo-chat-widget">
+		</div>
 			<Toolbar />
 			<Content>
 				<PageTitle breadcrumbs={[]} description="">
