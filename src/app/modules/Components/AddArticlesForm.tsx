@@ -56,7 +56,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [tags, setTags] = useState<string[]>([]);
 	const [tagOptions, setTagOptions] = useState<Tag[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
@@ -64,15 +64,12 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	useEffect(() => {
 		const fetchSubjects = async () => {
 			try {
-				const response = await fetch(
-					`${apiUrl}/subjects`,
-					{
-						headers: {
-							Authorization: `Bearer ${authToken}`,
-							"Content-Type": "application/json",
-						},
-					}
-				);
+				const response = await fetch(`${apiUrl}/subjects`, {
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+						"Content-Type": "application/json",
+					},
+				});
 				const data = await response.json();
 				setSubjects(data.items || []);
 			} catch (error) {
@@ -83,15 +80,12 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 
 		const fetchTags = async () => {
 			try {
-				const response = await fetch(
-					`${apiUrl}/tags`,
-					{
-						headers: {
-							Authorization: `Bearer ${authToken}`,
-							"Content-Type": "application/json",
-						},
-					}
-				);
+				const response = await fetch(`${apiUrl}/tags`, {
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+						"Content-Type": "application/json",
+					},
+				});
 				const data = await response.json();
 				setTagOptions(data.items || []);
 			} catch (error) {
@@ -122,23 +116,21 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 
 	const handleFileChange = async (
 		e: React.ChangeEvent<HTMLInputElement>,
-		setFileId: (fileId: string) => void
+		setFileId: (fileId: string) => void,
+		loaderKey: string
 	) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
-			setLoading(true);
+			setLoading((prev) => ({ ...prev, [loaderKey]: true }));
 			try {
 				// Request a presigned URL
-				const presignedUrlResponse = await fetch(
-					`${apiUrl}/presignedurls`,
-					{
-						method: "POST",
-						headers: {
-							Authorization: `Bearer ${authToken}`,
-							"Content-Type": "application/json",
-						},
-					}
-				);
+				const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+						"Content-Type": "application/json",
+					},
+				});
 				const presignedUrlData = await presignedUrlResponse.json();
 				const { presignedUrl, fileId } = presignedUrlData;
 
@@ -152,26 +144,33 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
 			} finally {
-				setLoading(false);
+				setLoading((prev) => ({ ...prev, [loaderKey]: false }));
 			}
 		}
 	};
 
 	const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		handleFileChange(e, (fileId: string) => {
-			setCoverImageUrl(`${imgUrl}${fileId}`);
-		});
+		handleFileChange(
+			e,
+			(fileId: string) => {
+				setCoverImageUrl(`${imgUrl}${fileId}`);
+			},
+			"coverImage"
+		);
 	};
 
-	const handleSectionFileChange = (index: number) => (
-		e: React.ChangeEvent<HTMLInputElement>
-	) => {
-		handleFileChange(e, (fileId: string) => {
-			const newSections = [...sections];
-			newSections[index].fileUrl = `${imgUrl}${fileId}`;
-			setSections(newSections);
-		});
-	};
+	const handleSectionFileChange =
+		(index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+			handleFileChange(
+				e,
+				(fileId: string) => {
+					const newSections = [...sections];
+					newSections[index].fileUrl = `${imgUrl}${fileId}`;
+					setSections(newSections);
+				},
+				`section-${index}`
+			);
+		};
 
 	const handleTagChange = (selectedOptions: any) => {
 		const selectedTagIds = selectedOptions.map((option: any) => option.value);
@@ -194,17 +193,14 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		console.log("Submitting article:", JSON.stringify(article, null, 2));
 
 		try {
-			const response = await fetch(
-				`${apiUrl}/articles`,
-				{
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${authToken}`,
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(article),
-				}
-			);
+			const response = await fetch(`${apiUrl}/articles`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(article),
+			});
 
 			const responseData = await response.json();
 
@@ -217,7 +213,9 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				setSubjectId("");
 				setTags([]);
 				setPublished(false);
-				setSections([{ order: 0, content: "", fileUrl: null, fileType: "IMAGE" }]);
+				setSections([
+					{ order: 0, content: "", fileUrl: null, fileType: "IMAGE" },
+				]);
 			} else {
 				console.error("Error adding article:", responseData);
 				toast.error("Failed to add article.");
@@ -293,15 +291,15 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						</select>
 					</div>
 					<div className="mb-4 col-12 col-md-6">
-						<label className="fs-5 fw-semibold mb-2">Cover Image {loading && (
-							<div className="loader mt-2"></div>
-						)}</label>
+						<label className="fs-5 fw-semibold mb-2">
+							Cover Image{" "}
+							{loading.coverImage && <div className="loader mt-2"></div>}
+						</label>
 						<input
 							type="file"
 							className="form-control"
 							onChange={handleCoverImageChange}
 						/>
-						
 					</div>
 
 					<div className="mb-4 col-12 col-md-6">
@@ -342,9 +340,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						<h4 className="mb-3">Sections</h4>
 						{sections.map((section, index) => (
 							<div key={index} className="mb-4">
-								<label className="fs-5 fw-semibold mb-2">
-									Order
-								</label>
+								<label className="fs-5 fw-semibold mb-2">Order</label>
 								<input
 									type="number"
 									className="form-control mb-2"
@@ -354,9 +350,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 									}
 									required
 								/>
-								<label className="fs-5 fw-semibold mb-2">
-									Content
-								</label>
+								<label className="fs-5 fw-semibold mb-2">Content</label>
 								<ReactQuill
 									value={section.content}
 									onChange={(content) =>
@@ -366,16 +360,16 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 									formats={formats}
 								/>
 								<label className="fs-5 fw-semibold mb-2 mt-2">
-									Image {loading && (
-									<div className="loader mt-2"></div>
-								)}
+									Image
+									{loading[`section-${index}`] && (
+										<div className="loader mt-2"></div>
+									)}
 								</label>
 								<input
 									type="file"
 									className="form-control"
 									onChange={handleSectionFileChange(index)}
 								/>
-								
 							</div>
 						))}
 						<button
@@ -387,10 +381,9 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						</button>
 					</div>
 					<div className="col-12 text-end">
-
-					<button type="submit" className="btn btn-primary">
-						Add Article
-					</button>
+						<button type="submit" className="btn btn-primary">
+							Add Article
+						</button>
 					</div>
 				</form>
 			</div>
@@ -400,25 +393,3 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 };
 
 export { AddArticlesForm };
-
-{/* <style>
-	.loader {
-		width: 48px;
-		height: 48px;
-		border: 5px solid #FFF;
-		border-bottom-color: #FF3D00;
-		border-radius: 50%;
-		display: inline-block;
-		box-sizing: border-box;
-		animation: rotation 1s linear infinite;
-	}
-
-	@keyframes rotation {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-</style> */}
