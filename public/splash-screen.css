@@ -82,3 +82,11 @@ html[data-bs-theme='dark'] .splash-screen .dark-logo {
   align-items: center;
   margin-top: 1.25rem;
 }
+
+.aside-menu .menu > .menu-item:not(.here) > .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-icon i,.aside-menu .menu > .menu-item.show > .menu-link .menu-icon, .aside-menu .menu > .menu-item.show > .menu-link .menu-icon .svg-icon, .aside-menu .menu > .menu-item.show > .menu-link .menu-icon i {
+  color: #DBDFE9 !important;
+}
+
+.menu-link:hover , .aside-menu .menu > .menu-item.here > .menu-link{
+  background-color: var(--bs-primary) !important;
+}
