@@ -14,7 +14,7 @@ type Props = {
 type Item = {
 	[x: string]: string;
 	id: string;
-	title: string;
+	name: string;
 	description: string;
 	coverImageUrl: string;
 	// articles: string[];
@@ -24,26 +24,21 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 	const [items, setItems] = useState<Item[]>([]);
 	const [page, setPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
-	const [selectedTagId, setSelectedTagId] = useState<string | null>(
-		null
-	);
+	const [selectedTagId, setSelectedTagId] = useState<string | null>(null);
+	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-
-	const fetchSubjects = async (page: number = 0) => {
+	const fetchTags = async (page: number = 0) => {
 		try {
-			const response = await fetch(
-				`${apiUrl}/tags?page=${page}`,
-				{
-					headers: {
-						Authorization: `Bearer ${authToken}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			const response = await fetch(`${apiUrl}/tags?page=${page}`, {
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+					"Content-Type": "application/json",
+				},
+			});
 			const data = await response.json();
 
 			setItems(data.items);
@@ -55,7 +50,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 	};
 
 	useEffect(() => {
-		fetchSubjects();
+		fetchTags();
 	}, []);
 
 	const handleDelete = (id: string) => {
@@ -94,14 +89,25 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 
 	const handlePageChange = (newPage: number) => {
 		if (newPage >= 0 && newPage < totalPages) {
-			fetchSubjects(newPage);
+			fetchTags(newPage);
 		}
 	};
+
+	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(event.target.value);
+	};
+
+	const filteredItems = items.filter(
+		(item) =>
+			item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			(item.description &&
+				item.description.toLowerCase().includes(searchQuery.toLowerCase()))
+	);
 
 	return (
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
-			<div className="d-flex">
+				<div className="d-flex">
 					<h3 className="card-title align-items-start flex-column">
 						<span className="card-label fw-bold fs-3 mb-1">Tags</span>
 					</h3>
@@ -115,6 +121,8 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 							data-kt-user-table-filter="search"
 							className="form-control form-control-solid w-250px ps-14"
 							placeholder="Search Tag"
+							value={searchQuery}
+							onChange={handleSearchChange}
 						/>
 					</div>
 				</div>
@@ -128,7 +136,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 						Add New Tag
 					</a>
 
-					<Add onAddSuccess={() => fetchSubjects(page)} />
+					<Add onAddSuccess={() => fetchTags(page)} />
 				</div>
 			</div>
 			<div className="card-body py-3">
@@ -144,7 +152,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{items.map((item, index) => (
+							{filteredItems.map((item, index) => (
 								<tr key={item.id}>
 									<td>
 										<div className="d-flex align-items-center">
@@ -198,10 +206,7 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 							))}
 						</tbody>
 					</table>
-					<Edit
-						tagId={selectedTagId}
-						onEditSuccess={() => fetchSubjects(page)}
-					/>
+					<Edit tagId={selectedTagId} onEditSuccess={() => fetchTags(page)} />
 				</div>
 				<div className="d-flex justify-content-start align-items-center mt-4">
 					<button

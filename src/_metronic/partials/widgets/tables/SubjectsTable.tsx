@@ -17,7 +17,6 @@ type Item = {
 	title: string;
 	description: string;
 	coverImageUrl: string;
-	// articles: string[];
 };
 
 const SubjectsTable: React.FC<Props> = ({ className }) => {
@@ -27,25 +26,12 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(
 		null
 	);
+	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
-
-	// const fetchPresignedUrl = async (id: string): Promise<string> => {
-	// 	const response = await fetch(
-	// 		`http://167.172.165.109:8080/api/v1/presignedurls/${id}`,
-	// 		{
-	// 			headers: {
-	// 				Authorization: `Bearer ${authToken}`,
-	// 				"Content-Type": "application/json",
-	// 			},
-	// 		}
-	// 	);
-	// 	const data = await response.json();
-	// 	return data.presignedUrl;
-	// };
 
 	const fetchSubjects = async (page: number = 0) => {
 		try {
@@ -56,12 +42,6 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 				},
 			});
 			const data = await response.json();
-			// const itemsWithUrls = await Promise.all(
-			// 	data.items.map(async (item: Item) => {
-			// 		const presignedUrl = await fetchPresignedUrl(item.coverImageId);
-			// 		return { ...item, coverImageUrl: presignedUrl };
-			// 	})
-			// );
 			setItems(data.items);
 			setPage(data.page);
 			setTotalPages(data.totalPages);
@@ -114,6 +94,16 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 		}
 	};
 
+	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(event.target.value);
+	};
+
+	const filteredItems = items.filter(
+		(item) =>
+			item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			item.description.toLowerCase().includes(searchQuery.toLowerCase())
+	);
+
 	return (
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
@@ -131,6 +121,8 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 							data-kt-user-table-filter="search"
 							className="form-control form-control-solid w-250px ps-14"
 							placeholder="Search Tent"
+							value={searchQuery}
+							onChange={handleSearchChange}
 						/>
 					</div>
 				</div>
@@ -156,12 +148,11 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-200px">Title</th>
 								<th className="min-w-300px">Description</th>
-								{/* <th className="min-w-100px">Image</th> */}
 								<th className="min-w-150px text-end">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							{items.map((item, index) => (
+							{filteredItems.map((item, index) => (
 								<tr key={item.id}>
 									<td>
 										<div className="d-flex align-items-center">
@@ -186,15 +177,6 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 											{item.description}
 										</span>
 									</td>
-									{/* <td>
-										<a
-											href={imgUrl + item.coverImageUrl}
-											className="btn-light-primary fw-bold d-block mb-1 fs-6"
-											target="blank"
-										>
-											Preview
-										</a>
-									</td> */}
 									<td className="text-end">
 										<a
 											href={item.coverImageUrl}

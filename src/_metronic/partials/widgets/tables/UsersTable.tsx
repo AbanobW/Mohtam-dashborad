@@ -26,10 +26,10 @@ const UsersTable: React.FC<Props> = () => {
 	const [items, setItems] = useState<Item[]>([]);
 	const [page, setPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
+	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
-
 
 	const fetchUsers = async (page: number = 0) => {
 		try {
@@ -131,6 +131,16 @@ const UsersTable: React.FC<Props> = () => {
 		});
 	};
 
+	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(event.target.value);
+	};
+
+	const filteredItems = items.filter(
+		(item) =>
+			item.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			item.email.toLowerCase().includes(searchQuery.toLowerCase())
+	);
+
 	return (
 		<>
 			<div className="card">
@@ -138,6 +148,21 @@ const UsersTable: React.FC<Props> = () => {
 					<h3 className="card-title align-items-start flex-column">
 						<span className="card-label fw-bold fs-3 mb-1">Users</span>
 					</h3>
+
+					<div className="d-flex align-items-center position-relative mx-3">
+						<KTIcon
+							iconName="magnifier"
+							className="fs-1 position-absolute ms-6"
+						/>
+						<input
+							type="text"
+							data-kt-user-table-filter="search"
+							className="form-control form-control-solid w-250px ps-14"
+							placeholder="Search User"
+							value={searchQuery}
+							onChange={handleSearchChange}
+						/>
+					</div>
 				</div>
 
 				<div className="card-body py-4">
@@ -155,17 +180,11 @@ const UsersTable: React.FC<Props> = () => {
 								</tr>
 							</thead>
 							<tbody className="text-gray-600 fw-bold">
-								{items.map((item, index) => (
+								{filteredItems.map((item, index) => (
 									<tr key={item.id}>
 										<td>{index + 1}</td>
 										<td>
 											<div className="d-flex align-items-center">
-												{/* <div className="symbol symbol-circle symbol-50px overflow-hidden me-3">
-													<a href="#">
-														<div className="symbol-label">
-														</div>
-													</a>
-												</div> */}
 												<div className="d-flex flex-column">
 													<a
 														href="#"
@@ -187,14 +206,6 @@ const UsersTable: React.FC<Props> = () => {
 										</td>
 										<td>{new Date(item.createdAt).toLocaleDateString()}</td>
 										<td className="text-end min-w-100px">
-											{/* <a
-												className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-												data-bs-toggle="modal"
-												data-bs-target="#kt_modal_edit_User"
-												onClick={() => setSelectedUserId(item.id)}
-											>
-												<KTIcon iconName="pencil" className="fs-3" />
-											</a> */}
 											<a
 												href="#"
 												className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"

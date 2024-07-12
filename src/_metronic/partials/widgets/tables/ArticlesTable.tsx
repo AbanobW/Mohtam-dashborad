@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { KTIcon } from "../../../helpers";
@@ -37,25 +35,10 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(
 		null
 	);
+	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
-	// const imgUrl = import.meta.env.VITE_APP_Img_URL;
-
 	const navigate = useNavigate();
-
-	// const fetchPresignedUrl = async (id: string): Promise<string> => {
-	// 	const response = await fetch(
-	// 		`http://167.172.165.109:8080/api/v1/presignedurls/${id}`,
-	// 		{
-	// 			headers: {
-	// 				Authorization: `Bearer ${authToken}`,
-	// 				"Content-Type": "application/json",
-	// 			},
-	// 		}
-	// 	);
-	// 	const data = await response.json();
-	// 	return data.presignedUrl;
-	// };
 
 	const fetchArticles = async (page: number = 0) => {
 		try {
@@ -66,12 +49,6 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 				},
 			});
 			const data = await response.json();
-			// const itemsWithUrls = await Promise.all(
-			// 	data.items.map(async (item: any) => {
-			// 		const presignedUrl = await fetchPresignedUrl(item.coverImageId);
-			// 		return { ...item, coverImageUrl: presignedUrl };
-			// 	})
-			// );
 			setItems(data.items);
 			setPage(data.page);
 			setTotalPages(data.totalPages);
@@ -111,7 +88,6 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 			if (result.isConfirmed) {
 				fetch(`${apiUrl}/articles/${id}`, {
 					method: "DELETE",
-
 					headers: {
 						Authorization: `Bearer ${authToken}`,
 						"Content-Type": "application/json",
@@ -187,6 +163,19 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 		return subject ? subject.title : "Unknown Subject";
 	};
 
+	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(event.target.value);
+	};
+
+	const filteredItems = items.filter(
+		(item) =>
+			item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			item.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			getSubjectTitle(item.subjectId)
+				.toLowerCase()
+				.includes(searchQuery.toLowerCase())
+	);
+
 	return (
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
@@ -204,6 +193,8 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 							data-kt-user-table-filter="search"
 							className="form-control form-control-solid w-250px ps-14"
 							placeholder="Search Camp Fire"
+							value={searchQuery}
+							onChange={handleSearchChange}
 						/>
 					</div>
 				</div>
@@ -229,9 +220,8 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{items.map((item, index) => (
+							{filteredItems.map((item, index) => (
 								<tr key={item.id}>
-									{/* Id */}
 									<td>
 										<div className="d-flex align-items-center">
 											<div className="d-flex justify-content-start flex-column">
@@ -241,7 +231,6 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 											</div>
 										</div>
 									</td>
-									{/* Title */}
 									<td>
 										<div className="d-flex align-items-center">
 											<div className="d-flex justify-content-start flex-column">
@@ -254,30 +243,16 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 											</div>
 										</div>
 									</td>
-									{/* Summary */}
 									<td>
 										<span className="text-gray-900 fw-bold d-block mb-1 fs-6">
 											{item.summary}
 										</span>
 									</td>
-									{/* Subject */}
 									<td>
 										<span className="text-gray-900 fw-bold d-block mb-1 fs-6">
 											{getSubjectTitle(item.subjectId)}
 										</span>
 									</td>
-									{/* Cover Image */}
-									{/* <td>
-										<a
-											href={imgUrl + item.coverImageUrl}
-											className="btn-light-primary fw-bold d-block mb-1 fs-6"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Preview
-										</a>
-									</td> */}
-									{/* Published */}
 									<td>
 										{item.published ? (
 											<span className="badge badge-light-success fs-6">
@@ -359,4 +334,5 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 		</div>
 	);
 };
+
 export { ArticlesTable };
