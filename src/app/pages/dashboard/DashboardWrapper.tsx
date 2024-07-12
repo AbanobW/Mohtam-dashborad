@@ -31,9 +31,9 @@ const DashboardPage = () => {
 							svgIcon="basket"
 							color="danger"
 							iconColor="white"
-							title="Subject"
+							title="Tents"
 							titleColor="white"
-							description="Our Subjects"
+							description="Our Tents"
 							descriptionColor="white"
 							link="/subjects"
 						/>
@@ -45,10 +45,10 @@ const DashboardPage = () => {
 							svgIcon="cheque"
 							color="info"
 							iconColor="white"
-							title="Articles"
+							title="Camp Fires"
 							titleColor="white"
 							descriptionColor="white"
-							description="Our Articles"
+							description="Our Camp Fires"
 							link="/articles"
 						/>
 					</div>

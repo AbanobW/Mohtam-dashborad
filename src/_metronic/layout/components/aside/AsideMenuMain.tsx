@@ -34,9 +34,9 @@ export function AsideMenuMain() {
 
       <AsideMenuItem
         to="/subjects"
-        title="Subjects"
+        title="Tents"
         // fontIcon="bi-kanban-fill fs-1"
-        bsTitle="SUBJECTS"
+        bsTitle="TENTS"
         className="py-2"
         imgIcon={camps} // Path to your SVG icon
 
@@ -44,9 +44,9 @@ export function AsideMenuMain() {
 
       <AsideMenuItem
         to="/articles"
-        title="Articles"
+        title="CampFires"
         // fontIcon="bi-newspaper fs-1"
-        bsTitle="ARTICLES"
+        bsTitle="CAMP FIRES"
         className="py-2"
         imgIcon={fire} // Path to your SVG icon
       />

@@ -33,7 +33,6 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
-
 	// const fetchPresignedUrl = async (id: string): Promise<string> => {
 	// 	const response = await fetch(
 	// 		`http://167.172.165.109:8080/api/v1/presignedurls/${id}`,
@@ -50,15 +49,12 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 
 	const fetchSubjects = async (page: number = 0) => {
 		try {
-			const response = await fetch(
-				`${apiUrl}/subjects?page=${page}`,
-				{
-					headers: {
-						Authorization: `Bearer ${authToken}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			const response = await fetch(`${apiUrl}/subjects?page=${page}`, {
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+					"Content-Type": "application/json",
+				},
+			});
 			const data = await response.json();
 			// const itemsWithUrls = await Promise.all(
 			// 	data.items.map(async (item: Item) => {
@@ -121,9 +117,24 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	return (
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
-				<h3 className="card-title align-items-start flex-column">
-					<span className="card-label fw-bold fs-3 mb-1">Subjects</span>
-				</h3>
+				<div className="d-flex">
+					<h3 className="card-title align-items-start flex-column">
+						<span className="card-label fw-bold fs-3 mb-1">Tents</span>
+					</h3>
+					<div className="d-flex align-items-center position-relative mx-3">
+						<KTIcon
+							iconName="magnifier"
+							className="fs-1 position-absolute ms-6"
+						/>
+						<input
+							type="text"
+							data-kt-user-table-filter="search"
+							className="form-control form-control-solid w-250px ps-14"
+							placeholder="Search Tent"
+						/>
+					</div>
+				</div>
+
 				<div className="card-toolbar">
 					<a
 						className="btn btn-sm btn-light-primary"
@@ -131,7 +142,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 						data-bs-target="#kt_modal_add_Sub"
 					>
 						<KTIcon iconName="plus" className="fs-2" />
-						Add New Subject
+						Add New Tent
 					</a>
 
 					<Add onAddSuccess={() => fetchSubjects(page)} />
@@ -185,11 +196,10 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 										</a>
 									</td> */}
 									<td className="text-end">
-									<a
-											href={ item.coverImageUrl}
+										<a
+											href={item.coverImageUrl}
 											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
 											target="_blank"
-
 										>
 											<KTIcon iconName="eye" className="fs-3" />
 										</a>

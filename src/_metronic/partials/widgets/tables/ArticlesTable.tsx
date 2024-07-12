@@ -190,13 +190,27 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	return (
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
-				<h3 className="card-title align-items-start flex-column">
-					<span className="card-label fw-bold fs-3 mb-1">Articles</span>
-				</h3>
+				<div className="d-flex">
+					<h3 className="card-title align-items-start flex-column">
+						<span className="card-label fw-bold fs-3 mb-1">Camp Fire</span>
+					</h3>
+					<div className="d-flex align-items-center position-relative mx-3">
+						<KTIcon
+							iconName="magnifier"
+							className="fs-1 position-absolute ms-6"
+						/>
+						<input
+							type="text"
+							data-kt-user-table-filter="search"
+							className="form-control form-control-solid w-250px ps-14"
+							placeholder="Search Camp Fire"
+						/>
+					</div>
+				</div>
 				<div className="card-toolbar">
 					<Link className="btn btn-sm btn-light-primary" to="/addArticle">
 						<KTIcon iconName="plus" className="fs-2" />
-						Add New Article
+						Add New Camp Fire
 					</Link>
 				</div>
 			</div>
@@ -277,10 +291,9 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 									</td>
 									<td className="text-end">
 										<a
-											href={ item.coverImageUrl}
+											href={item.coverImageUrl}
 											className="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
 											target="_blank"
-
 										>
 											<KTIcon iconName="eye" className="fs-3" />
 										</a>

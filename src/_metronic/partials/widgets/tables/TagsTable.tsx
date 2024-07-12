@@ -101,9 +101,23 @@ const TagsTable: React.FC<Props> = ({ className }) => {
 	return (
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
-				<h3 className="card-title align-items-start flex-column">
-					<span className="card-label fw-bold fs-3 mb-1">Tags</span>
-				</h3>
+			<div className="d-flex">
+					<h3 className="card-title align-items-start flex-column">
+						<span className="card-label fw-bold fs-3 mb-1">Tags</span>
+					</h3>
+					<div className="d-flex align-items-center position-relative mx-3">
+						<KTIcon
+							iconName="magnifier"
+							className="fs-1 position-absolute ms-6"
+						/>
+						<input
+							type="text"
+							data-kt-user-table-filter="search"
+							className="form-control form-control-solid w-250px ps-14"
+							placeholder="Search Tag"
+						/>
+					</div>
+				</div>
 				<div className="card-toolbar">
 					<a
 						className="btn btn-sm btn-light-primary"
