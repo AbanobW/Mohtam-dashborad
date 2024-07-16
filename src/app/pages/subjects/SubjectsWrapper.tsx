@@ -24,51 +24,51 @@ import { Toolbar2 } from "../../../_metronic/layout/components/toolbar/Toolbar2"
 
 const SubjectsPage = () => {
 	return (
-		// <PageDataProvider>
-		// 	<div className="d-flex flex-column flex-root">
-		// 		{/* begin::Page */}
-		// 		<div className="page d-flex flex-row flex-column-fluid">
-		// 			<AsideDefault />
-		// 			{/* begin::Wrapper */}
-		// 			<div
-		// 				className="wrapper d-flex flex-column flex-row-fluid"
-		// 				id="kt_wrapper"
-		// 			>
-		// 				<HeaderWrapper />
-		// 				{/* begin::Content */}
-		// 				<div
-		// 					id="kt_content"
-		// 					className="content d-flex flex-column flex-column-fluid"
-		// 				>
-		// 					<Outlet />
-		// 					<Toolbar2 />
+		<PageDataProvider>
+			<div className="d-flex flex-column flex-root">
+				{/* begin::Page */}
+				<div className="page d-flex flex-row flex-column-fluid">
+					<AsideDefault />
+					{/* begin::Wrapper */}
+					<div
+						className="wrapper d-flex flex-column flex-row-fluid"
+						id="kt_wrapper"
+					>
+						<HeaderWrapper />
+						{/* begin::Content */}
+						<div
+							id="kt_content"
+							className="content d-flex flex-column flex-column-fluid"
+						>
+							<Outlet />
+							<Toolbar2 />
 
-		// 					<Content>
+							<Content>
 								<div className="g-5 gx-xxl-8">
 									<SubjectsTable className="" />
 								</div>
-		// 					</Content>
-		// 				</div>
-		// 				{/* end::Content */}
-		// 				<Footer />
-		// 			</div>
-		// 			{/* end::Wrapper */}
-		// 		</div>
-		// 		{/* end::Page */}
-		// 	</div>
+							</Content>
+						</div>
+						{/* end::Content */}
+						<Footer />
+					</div>
+					{/* end::Wrapper */}
+				</div>
+				{/* end::Page */}
+			</div>
 
-		// 	{/* begin:: Drawers */}
-		// 	<ActivityDrawer />
-		// 	{/* <RightToolbar /> */}
-		// 	<DrawerMessenger />
-		// 	{/* end:: Drawers */}
+			{/* begin:: Drawers */}
+			<ActivityDrawer />
+			{/* <RightToolbar /> */}
+			<DrawerMessenger />
+			{/* end:: Drawers */}
 
-		// 	{/* begin:: Modals */}
-		// 	<InviteUsers />
-		// 	<UpgradePlan />
-		// 	{/* end:: Modals */}
-		// 	<ScrollTop />
-		// </PageDataProvider>
+			{/* begin:: Modals */}
+			<InviteUsers />
+			<UpgradePlan />
+			{/* end:: Modals */}
+			<ScrollTop />
+		</PageDataProvider>
 	);
 };
 
