@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { KTIcon } from "../../../helpers";
 import { Link } from "react-router-dom";
@@ -12,6 +13,7 @@ type Props = {
 	description: string;
 	descriptionColor?: string;
 	link?: string;
+	customIcon?: React.ReactNode | string; // Update the type of customIcon
 };
 
 const StatisticsWidget5: React.FC<Props> = ({
@@ -24,10 +26,22 @@ const StatisticsWidget5: React.FC<Props> = ({
 	description,
 	descriptionColor,
 	link,
+	customIcon,
 }) => {
 	const cardContent = (
 		<div className="card-body">
-			<KTIcon iconName={svgIcon} className={`text-${iconColor} fs-3x ms-n1`} />
+			{typeof customIcon === "string" ? (
+				<img
+					src={customIcon}
+					alt=""
+					className={`text-${iconColor} fs-3x ms-n1`}
+				/>
+			) : (
+				<KTIcon
+					iconName={svgIcon}
+					className={`text-${iconColor} fs-3x ms-n1`}
+				/>
+			)}
 
 			<div className={`text-${titleColor ?? "white"} fw-bold fs-2 mb-2 mt-5`}>
 				{title}
@@ -44,9 +58,7 @@ const StatisticsWidget5: React.FC<Props> = ({
 			{cardContent}
 		</Link>
 	) : (
-		<div className={`card bg-${color} ${className}`}>
-			{cardContent}
-		</div>
+		<div className={`card bg-${color} ${className}`}>{cardContent}</div>
 	);
 };
 

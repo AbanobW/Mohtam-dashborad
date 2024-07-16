@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { PageTitle } from "../../../_metronic/layout/core";
 import { StatisticsWidget5 } from "../../../_metronic/partials/widgets";
 import { Toolbar } from "../../../_metronic/layout/components/toolbar/Toolbar";
 import { Content } from "../../../_metronic/layout/components/Content";
+import fires from "../../../../public/media/icons/sho3la.svg";
+import camps from "../../../../public/media/icons/campsWhite.svg";
 
 const DashboardPage = () => {
 	useEffect(() => {
@@ -16,8 +19,7 @@ const DashboardPage = () => {
 
 	return (
 		<>
-		<div className="js-widget echo-chat-widget">
-		</div>
+			<div className="js-widget echo-chat-widget"></div>
 			<Toolbar />
 			<Content>
 				<PageTitle breadcrumbs={[]} description="">
@@ -27,9 +29,10 @@ const DashboardPage = () => {
 				<div className="row g-5 g-xl-8">
 					<div className="col-xl-4">
 						<StatisticsWidget5
+							customIcon={camps}
 							className="card-xl-stretch mb-xl-8"
 							svgIcon="basket"
-							color="danger"
+							color="info"
 							iconColor="white"
 							title="Tents"
 							titleColor="white"
@@ -41,9 +44,10 @@ const DashboardPage = () => {
 
 					<div className="col-xl-4">
 						<StatisticsWidget5
+							customIcon={fires}
 							className="card-xl-stretch mb-xl-8"
 							svgIcon="cheque"
-							color="info"
+							color="danger"
 							iconColor="white"
 							title="Camp Fires"
 							titleColor="white"
