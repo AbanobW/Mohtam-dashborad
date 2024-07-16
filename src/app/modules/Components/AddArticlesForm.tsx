@@ -17,7 +17,7 @@ type Section = {
 	order: number;
 	content: string;
 	fileUrl: string | null;
-	fileType: string;
+	fileType: "IMAGE" | "VIDEO";
 };
 
 type Article = {
@@ -116,7 +116,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 
 	const handleFileChange = async (
 		e: React.ChangeEvent<HTMLInputElement>,
-		setFileId: (fileId: string) => void,
+		setFileId: (fileId: string, fileType: "IMAGE" | "VIDEO") => void,
 		loaderKey: string
 	) => {
 		const file = e.target.files && e.target.files[0];
@@ -139,7 +139,9 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					method: "PUT",
 					body: file,
 				});
-				setFileId(fileId);
+
+				const fileType = file.type.startsWith("video/") ? "VIDEO" : "IMAGE";
+				setFileId(fileId, fileType);
 			} catch (error) {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
@@ -163,9 +165,10 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		(index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
 			handleFileChange(
 				e,
-				(fileId: string) => {
+				(fileId: string, fileType: "IMAGE" | "VIDEO") => {
 					const newSections = [...sections];
 					newSections[index].fileUrl = `${imgUrl}${fileId}`;
+					newSections[index].fileType = fileType;
 					setSections(newSections);
 				},
 				`section-${index}`
@@ -234,6 +237,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	};
 
 	const formats = ["bold", "italic", "underline", "list", "bullet"];
+
 
 	return (
 		<div className={`card ${className}`}>
