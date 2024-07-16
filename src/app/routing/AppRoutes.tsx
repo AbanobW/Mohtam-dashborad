@@ -11,13 +11,13 @@ import { PrivateRoutes } from "./PrivateRoutes";
 import { ErrorsPage } from "../modules/errors/ErrorsPage";
 import { Logout, AuthPage, useAuth } from "../modules/auth";
 import { App } from "../App";
-import { SubjectsWrapper } from "../modules/subjects/subjects";
 import { ArticlesWrapper } from "../modules/articles/articles";
 import { AddArticlesWrapper } from "../modules/articles/Add";
 import { EditArticlesWrapper } from "../modules/articles/Edit";
 import { UsersWrapper } from "../modules/users/users";
 import { TagsWrapper } from "../modules/tags/tags";
 import { ChatWrapper } from "../modules/chat/chat";
+import { SubjectsWrapper } from "../pages/subjects/SubjectsWrapper";
 
 /**
  * Base URL of the website.
