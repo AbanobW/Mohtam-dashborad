@@ -213,7 +213,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-250px">Title</th>
 								<th className="min-w-300px">Summary</th>
-								<th className="min-w-200px">Subject</th>
+								<th className="min-w-200px">Tent</th>
 								{/* <th className="min-w-50px">Cover Image</th> */}
 								<th className="min-w-50px">Published</th>
 								<th className="min-w-200px text-end">Actions</th>

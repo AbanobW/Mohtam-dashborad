@@ -173,7 +173,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		};
 
 	const handleTagChange = (selectedOptions: any) => {
-		const selectedTagIds = selectedOptions.map((option: any) => option.value);
+		const selectedTagIds = selectedOptions.map((option: any) => option.label);
 		setTags(selectedTagIds);
 	};
 
@@ -205,7 +205,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 			const responseData = await response.json();
 
 			if (response.ok) {
-				toast.success("Article added successfully!");
+				toast.success("Camp Fires added successfully!");
 				setTitle("");
 				setSummary("");
 				setCoverImageFile(null);
@@ -217,8 +217,8 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					{ order: 0, content: "", fileUrl: null, fileType: "IMAGE" },
 				]);
 			} else {
-				console.error("Error adding article:", responseData);
-				toast.error("Failed to add article.");
+				console.error("Error adding Camp Fire:", responseData);
+				toast.error("Failed to add Camp Fire.");
 			}
 		} catch (error) {
 			console.error("An error occurred:", error);
@@ -239,7 +239,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		<div className={`card ${className}`}>
 			<div className="card-header border-0 pt-5">
 				<h3 className="card-title align-items-start flex-column">
-					<span className="card-label fw-bold fs-3 mb-1">Add new article</span>
+					<span className="card-label fw-bold fs-3 mb-1">Add new camp fire</span>
 				</h3>
 			</div>
 			<div className="card-body py-3">
@@ -272,7 +272,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 
 					<div className="mb-4 col-12 col-md-6">
 						<label htmlFor="subjectId" className="fs-5 fw-semibold mb-2">
-							Subject
+							Tents
 						</label>
 						<select
 							className="form-control"
@@ -281,7 +281,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 							onChange={(e) => setSubjectId(e.target.value)}
 							required
 						>
-							<option value="">Select a subject</option>
+							<option value="">Select a tent</option>
 							{Array.isArray(subjects) &&
 								subjects.map((subject) => (
 									<option key={subject.id} value={subject.id}>
@@ -292,7 +292,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					</div>
 					<div className="mb-4 col-12 col-md-6">
 						<label className="fs-5 fw-semibold mb-2">
-							Cover Image{" "}
+							Cover media{" "}
 							{loading.coverImage && <div className="loader mt-2"></div>}
 						</label>
 						<input
@@ -360,7 +360,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 									formats={formats}
 								/>
 								<label className="fs-5 fw-semibold mb-2 mt-2">
-									Image
+									Media
 									{loading[`section-${index}`] && (
 										<div className="loader mt-2"></div>
 									)}
@@ -382,7 +382,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					</div>
 					<div className="col-12 text-end">
 						<button type="submit" className="btn btn-primary">
-							Add Article
+							Add Camp Fires
 						</button>
 					</div>
 				</form>

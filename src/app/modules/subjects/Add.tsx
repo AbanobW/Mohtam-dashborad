@@ -108,7 +108,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			});
 
 			if (!response.ok) {
-				throw new Error("Failed to add subject");
+				throw new Error("Failed to add tent");
 			}
 
 			// Clear form inputs
@@ -124,7 +124,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			}
 
 			// Show success toast and close modal
-			toast.success("Subject added successfully!", {
+			toast.success("Tent added successfully!", {
 				position: "top-right",
 				autoClose: 3000,
 				hideProgressBar: false,
@@ -139,9 +139,9 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 				onAddSuccess();
 			}
 		} catch (error) {
-			console.error("Error adding subject:", error);
+			console.error("Error adding tent:", error);
 			// Show error toast
-			toast.error("Failed to add subject. Please try again later.", {
+			toast.error("Failed to add tent. Please try again later.", {
 				position: "top-right",
 				autoClose: 3000,
 				hideProgressBar: false,
@@ -175,7 +175,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 						</div>
 						<div className="modal-body scroll-y pt-0 pb-15">
 							<div className="text-center mb-13">
-								<h1 className="mb-3">Add New Subject</h1>
+								<h1 className="mb-3">Add New Tent</h1>
 							</div>
 							<form
 								className="form w-100"

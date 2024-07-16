@@ -171,7 +171,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 			}
 
 			// Show success toast and close modal
-			toast.success("Subject updated successfully!", {
+			toast.success("Tent updated successfully!", {
 				position: "top-right",
 				autoClose: 3000,
 				hideProgressBar: false,
@@ -186,9 +186,9 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 				onEditSuccess();
 			}
 		} catch (error) {
-			console.error("Error updating subject:", error);
+			console.error("Error updating tent:", error);
 			// Show error toast
-			toast.error("Failed to update subject. Please try again later.", {
+			toast.error("Failed to update tent. Please try again later.", {
 				position: "top-right",
 				autoClose: 3000,
 				hideProgressBar: false,
@@ -222,7 +222,7 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 						</div>
 						<div className="modal-body scroll-y pt-0 pb-15">
 							<div className="text-center mb-13">
-								<h1 className="mb-3">Edit Subject</h1>
+								<h1 className="mb-3">Edit Tent</h1>
 							</div>
 							<form
 								className="form w-100"
