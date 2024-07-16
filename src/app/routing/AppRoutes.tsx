@@ -17,7 +17,7 @@ import { EditArticlesWrapper } from "../modules/articles/Edit";
 import { UsersWrapper } from "../modules/users/users";
 import { TagsWrapper } from "../modules/tags/tags";
 import { ChatWrapper } from "../modules/chat/chat";
-// import { SubjectsWrapper } from "../pages/subjects/SubjectsWrapper";
+import { SubjectsWrapper } from "../pages/subjects/SubjectsWrapper";
 
 /**
  * Base URL of the website.
@@ -39,7 +39,7 @@ const AppRoutes: FC = () => {
 							<Route path="chat" element={<ChatWrapper />} />
 							<Route path="users" element={<UsersWrapper />} />
 							<Route path="tags" element={<TagsWrapper />} />
-							{/* <Route path="subjects" element={<SubjectsWrapper />} /> */}
+							<Route path="subjects" element={<SubjectsWrapper />} />
 							<Route path="articles" element={<ArticlesWrapper />} />
 							<Route path="addArticle" element={<AddArticlesWrapper />} />
 							<Route path="editArticle" element={<EditArticlesWrapper />} />
