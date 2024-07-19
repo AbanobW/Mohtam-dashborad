@@ -22,7 +22,7 @@ const ChatWrapper = () => {
   return (
     <>
       <div className="js-widget echo-chat-widget"></div>
-      <h1>test</h1>
+      {/* <h1>test</h1> */}
       <Helmet>
         <script
           src="https://miracle.echoglobal.org/client/websites/full_frame_widget.js?v=6"
