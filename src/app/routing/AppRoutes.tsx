@@ -32,11 +32,11 @@ const AppRoutes: FC = () => {
 		<BrowserRouter basename={BASE_URL}>
 			<Routes>
 				<Route element={<App />}>
+				<Route path="chat" element={<ChatWrapper />} />
 					{currentUser ? (
 						<>
 							<Route path="/*" element={<PrivateRoutes />} />
 							<Route index element={<Navigate to="/dashboard" />} />
-							<Route path="chat" element={<ChatWrapper />} />
 							<Route path="users" element={<UsersWrapper />} />
 							<Route path="tags" element={<TagsWrapper />} />
 							<Route path="subjects" element={<SubjectsWrapper />} />
