@@ -19,17 +19,17 @@ const ChatWrapper = () => {
 
 	return (
 		<>
-			{/* <div className="js-widget echo-chat-widget"></div> */}
+			<div className="js-widget echo-chat-widget"></div>
 			{/* <h1>test</h1> */}
 			<div className="d-flex justify-content-center align-items-center h-100">
 				<div className="loader"></div>
 			</div>
-			{/* <Helmet>
+			<Helmet>
 				<script
 					src="https://miracle.echoglobal.org/client/websites/full_frame_widget.js?v=6"
 					type="text/javascript"
 				></script>
-			</Helmet> */}
+			</Helmet>
 		</>
 	);
 };
