@@ -29,9 +29,9 @@ const ChatWrapper = () => {
 					type="text/javascript"
 				></script>
 			</Helmet>
-			
+
 			<style type="text/css">
-					{`
+				{`
 						.echo-chat-widget .chat-widget-body .chat-list {
     gap: 12px;
     display: flex;
@@ -166,6 +166,7 @@ background: white !important;
     color:  #ED1C24 !important;
 	font-weight: 600 !important
 	width: 15% !important;
+	position: static !important;
 }
 
 .echo-chat-widget .message{
@@ -199,10 +200,15 @@ width: 85% !important;
 margin:0 !important;
 padding:0 10px!important;
 width:100% !important;}
-					`}
-				</style>
-			{/* <script type="text/javascript" src="chat.js"></script> */}
 
+.echo-chat-widget .new-message-form{
+
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;}
+					`}
+			</style>
+			{/* <script type="text/javascript" src="chat.js"></script> */}
 
 			{/* <link rel="stylesheet" href="chat.css" /> */}
 		</>
