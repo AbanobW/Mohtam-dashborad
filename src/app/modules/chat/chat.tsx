@@ -172,6 +172,19 @@ background: transparent !important;
  {
     color: white !important;
   }
+
+  .js-close-chat .close-button i {
+  color:black !important;}
+
+  .echo-chat-widget textarea::placeholder{
+    color:black !important;
+}
+
+.js-widget.echo-chat-widget .echo-disconnected-center{
+
+    color:  #ED1C24 !important;
+
+}
 					`}
 				</style>
 			{/* <script type="text/javascript" src="chat.js"></script> */}
