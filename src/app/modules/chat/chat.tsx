@@ -131,7 +131,7 @@ letter-spacing: -0.02149796113371849px !important;
 height: 100% !important;
 gap: 0px !important;
 border-radius: 20px !important;
-border: 1px solid #F1F1F1 !important;
+border: 1px solid #000 !important;
 background: #FFFFFF;
   }
 
@@ -151,7 +151,7 @@ background: #FFFFFF;
 }
 
 .echo-chat-widget .chat-form {
-margin :0px !important;
+margin-bottom :35px !important;
 background: transparent !important;
 }
 
