@@ -106,6 +106,7 @@ letter-spacing: -0.02149796113371849px !important;
   #js-chat-list {
     list-style-type: none !important;
     padding: 0 !important;
+	padding-bottom: 40px !important;
   }
   
   .js-chat-message {
@@ -137,6 +138,8 @@ background: #FFFFFF;
 
   .echo-chat-widget .new-message-form{
     color: transparent !important;
+	    margin-left: 10px !important;
+    margin-right: 10px !important;
   }
 
   .echo-chat-widget .echo-chat-header{
@@ -161,6 +164,7 @@ background: transparent !important;
 
 .js-widget.echo-chat-widget .echo-button.button-text {
     color:  #ED1C24 !important;
+	font-weight: 600 !important
 }
 
 .echo-chat-widget .message{
@@ -184,6 +188,10 @@ background: transparent !important;
 
     color:  #ED1C24 !important;
 
+}
+
+.js-widget.echo-chat-widget .new-message-content {
+width: 100% !important;
 }
 					`}
 				</style>
