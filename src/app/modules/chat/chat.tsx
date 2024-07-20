@@ -137,7 +137,7 @@ background: #FFFFFF;
   }
 
   .echo-chat-widget .new-message-form{
-    color: transparent !important;
+    color: white !important;
 	    margin-left: 10px !important;
     margin-right: 10px !important;
   }
@@ -154,8 +154,8 @@ background: #FFFFFF;
 }
 
 .echo-chat-widget .chat-form {
-margin-bottom :35px !important;
-background: transparent !important;
+margin-bottom :0px !important;
+background: white !important;
 }
 
 .js-widget.echo-chat-widget .new-message-content{
@@ -165,6 +165,7 @@ background: transparent !important;
 .js-widget.echo-chat-widget .echo-button.button-text {
     color:  #ED1C24 !important;
 	font-weight: 600 !important
+	width: 15% !important;
 }
 
 .echo-chat-widget .message{
@@ -191,8 +192,13 @@ background: transparent !important;
 }
 
 .js-widget.echo-chat-widget .new-message-content {
-width: 100% !important;
+width: 85% !important;
 }
+
+.echo-chat-widget .chat-widget-body{
+margin:0 !important;
+padding:0 10px!important;
+width:100% !important;}
 					`}
 				</style>
 			{/* <script type="text/javascript" src="chat.js"></script> */}
