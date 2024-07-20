@@ -20,7 +20,6 @@ const ChatWrapper = () => {
 	return (
 		<>
 			<div className="js-widget echo-chat-widget"></div>
-			{/* <h1>test</h1> */}
 			<div className="d-flex justify-content-center align-items-center h-100">
 				<div className="loader"></div>
 			</div>
@@ -30,6 +29,11 @@ const ChatWrapper = () => {
 					type="text/javascript"
 				></script>
 			</Helmet>
+			
+			{/* <script type="text/javascript" src="chat.js"></script> */}
+
+
+			<link rel="stylesheet" href="chat.css" />
 		</>
 	);
 };
