@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import bgChat from "../../modules/chat/chat-bg.png"
+import connected from "../../modules/chat/connected.png"
 declare global {
 	interface Window {
 		echo_tenant: string;
@@ -33,7 +34,7 @@ const ChatWrapper = () => {
 
 			<style type="text/css">
 				{`
-						.echo-chat-widget .chat-widget-body .chat-list {
+				.echo-chat-widget .chat-widget-body .chat-list {
   gap: 12px;
   display: flex;
   flex-direction: column;
@@ -212,6 +213,7 @@ const ChatWrapper = () => {
   font-weight: 600 !important;
   width: 15% !important;
   position: static !important;
+  font-size: clamp(1rem, 0.8214rem + 0.8929vw, 1.25rem) !important;
 }
 
 .echo-chat-widget .message {
@@ -262,6 +264,7 @@ const ChatWrapper = () => {
   padding-bottom: 10px !important;
   margin-bottom: 20px !important;
   // border-bottom: 1px solid #ccc;
+  display: none !important;
 }
 
 .chat-banner[dir="rtl"] {
@@ -300,12 +303,33 @@ const ChatWrapper = () => {
     width: 100% !important;
     max-width: 480px !important;
 }
+    .echo-chat-widget .echo-chat-header .echo-title.echo-connected-with{
+    display: inline !important;
+    }
+
+    .echo-chat-widget .echo-chat-header .echo-title{
+        white-space: normal !important;
+}
+
+    .echo-chat-widget .echo-chat-header  .echo-title.echo-connected-with:nth-child(2)::before {
+        content: url('${connected}'); 
+        display: inline-block;
+        margin-right: 10px; /* Adjust spacing as needed */
+        vertical-align: middle;
+}
 
 `}
 			</style>
-			{/* <script type="text/javascript" src="chat.js"></script> */}
-
-			{/* <link rel="stylesheet" href="chat.css" /> */}
+      <script type="text/javascript">
+      {`
+document.addEventListener("DOMContentLoaded", function() {
+    var echoTitleElement = document.querySelector('h1.echo-title');
+    if (echoTitleElement) {
+        echoTitleElement.removeAttribute('style');
+    }
+});
+`}
+      </script>
 		</>
 	);
 };
