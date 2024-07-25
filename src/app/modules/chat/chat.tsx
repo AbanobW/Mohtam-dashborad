@@ -19,6 +19,14 @@ const ChatWrapper = () => {
 		window.echo_uuid = "abebb8ca-bad4-4051-b890-bcc147b60ac5";
 	}, []);
 
+  useEffect(() => {
+    // JavaScript code to remove "ب" from "الحوار متصل ب"
+    const echoTitleElement = document.querySelector('h1.echo-title.echo-connected-with');
+    if (echoTitleElement) {
+      echoTitleElement.innerHTML = echoTitleElement.innerHTML.replace(" ب", "");
+    }
+  }, []);
+
 	return (
 		<>
 			<div className="js-widget echo-chat-widget"></div>
@@ -34,6 +42,10 @@ const ChatWrapper = () => {
 
 			<style type="text/css">
 				{`
+
+        .echo-connected-with span {
+        display:none !important;
+        }
 				.echo-chat-widget .chat-widget-body .chat-list {
   gap: 12px;
   display: flex;
@@ -318,6 +330,9 @@ const ChatWrapper = () => {
         vertical-align: middle;
 }
 
+.echo-chat-widget .message .message-name{
+display: none !important;}
+
 `}
 			</style>
       <script type="text/javascript">
@@ -330,6 +345,12 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 `}
       </script>
+
+      <script type="text/javascript">
+      {`  const echoTitleElement = document.querySelector('h1.echo-title.echo-connected-with');
+    if (echoTitleElement) {
+      echoTitleElement.innerHTML = echoTitleElement.innerHTML.replace(" ب", "");
+    }`}</script>
 		</>
 	);
 };
