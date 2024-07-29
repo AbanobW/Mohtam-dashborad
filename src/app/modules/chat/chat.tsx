@@ -329,6 +329,21 @@ const ChatWrapper = () => {
         margin-right: 10px; /* Adjust spacing as needed */
         vertical-align: middle;
 }
+        .echo-chat-widget .echo-chat-header  .echo-title.echo-connected-with:nth-child(2){
+        color:transparent !important;
+        position: relative;
+        }
+
+        .echo-chat-widget .echo-chat-header  .echo-title.echo-connected-with:nth-child(3){
+        display: none !important;}
+
+.echo-chat-widget .echo-chat-header  .echo-title.echo-connected-with:nth-child(2)::after {
+content:"الحوار متصل";
+color:black !important;
+position: absolute;
+    left: 0%;
+    top: 0px;
+}
 
 .echo-chat-widget .message .message-name{
 display: none !important;}
