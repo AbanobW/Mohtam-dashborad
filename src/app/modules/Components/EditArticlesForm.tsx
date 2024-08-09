@@ -53,7 +53,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 	const articleData = location.state.item;
 
 	const [title, setTitle] = useState<string>(articleData?.title || "");
-	const [summary, setSummary] = useState<string>(articleData?.summary || "");
+	const [summary, setSummary] = useState<string>(articleData?.summary || "summary");
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 	const [coverImageUrl, setCoverImageUrl] = useState<string>(
 		articleData?.coverImageUrl || ""
@@ -196,7 +196,6 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 			published,
 		};
 
-		console.log("Submitting article:", JSON.stringify(article, null, 2));
 
 		try {
 			const response = await fetch(`${apiUrl}/articles/${article.id}`, {
@@ -211,11 +210,10 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 			const responseData = await response.json();
 
 			if (response.ok) {
-				toast.success("Article updated successfully!");
-				navigate("/articles");
+				toast.success("CampFires updated successfully!");
 			} else {
-				console.error("Error updating article:", responseData);
-				toast.error("Failed to update article.");
+				console.error("Error updating CampFires:", responseData);
+				toast.error("Failed to update CampFires.");
 			}
 		} catch (error) {
 			console.error("An error occurred:", error);
@@ -232,12 +230,17 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
 	const formats = ["bold", "italic", "underline", "list", "bullet"];
 
+	const handleDeleteSection = (index: number) => {
+		const newSections = sections.filter((_, i) => i !== index);
+		setSections(newSections);
+	};
+
 	return (
 		<>
 			<div className={`card ${className}`}>
 				<div className="card-header border-0 pt-5">
 					<h3 className="card-title align-items-start flex-column">
-						<span className="card-label fw-bold fs-3 mb-1">Edit article</span>
+						<span className="card-label fw-bold fs-3 mb-1">Edit Camp Fire</span>
 					</h3>
 				</div>
 				<div className="card-body py-3">
@@ -255,7 +258,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 								required
 							/>
 						</div>
-						<div className="mb-4 col-12 col-md-6">
+						{/* <div className="mb-4 col-12 col-md-6">
 							<label htmlFor="summary" className="fs-5 fw-semibold mb-2">
 								Summary
 							</label>
@@ -266,11 +269,11 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 								onChange={(e) => setSummary(e.target.value)}
 								required
 							/>
-						</div>
+						</div> */}
 
 						<div className="mb-4 col-12 col-md-6">
 							<label htmlFor="subjectId" className="fs-5 fw-semibold mb-2">
-								Subject
+								Tent
 							</label>
 							<select
 								className="form-control"
@@ -279,7 +282,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 								onChange={(e) => setSubjectId(e.target.value)}
 								required
 							>
-								<option value="">Select a subject</option>
+								<option value="">Select a tent</option>
 								{Array.isArray(subjects) &&
 									subjects.map((subject) => (
 										<option key={subject.id} value={subject.id}>
@@ -306,27 +309,6 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 							/>
 						</div>
 						<div className="mb-4 col-12 col-md-6">
-							<label htmlFor="coverImage" className="fs-5 fw-semibold mb-2">
-								Cover Image
-							</label>
-							<input
-								type="file"
-								className="form-control"
-								id="coverImage"
-								onChange={handleCoverImageChange}
-								disabled={loading}
-							/>
-							{loading && <div>Loading...</div>}
-							{coverImageUrl && (
-								<img
-									src={coverImageUrl}
-									alt="Cover"
-									className="img-fluid mt-2"
-								/>
-							)}
-						</div>
-
-						<div className="mb-4 col-12 col-md-6">
 							<label className="fs-5 fw-semibold mb-2">Published</label>
 							<div className="form-check form-switch">
 								<input
@@ -341,6 +323,28 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 								</label>
 							</div>
 						</div>
+						<div className="mb-4 col-12 col-md-6">
+							<label htmlFor="coverImage" className="fs-5 fw-semibold mb-2">
+								Cover Image
+							</label>
+							<input
+								type="file"
+								className="form-control"
+								id="coverImage"
+								onChange={handleCoverImageChange}
+								disabled={loading}
+							/>
+							{loading && <div className="loader mt-2"></div>}
+							{coverImageUrl && (
+								<img
+									src={coverImageUrl}
+									alt="Cover"
+									className="img-fluid mt-2"
+								/>
+							)}
+						</div>
+
+						
 
 						<div className="col-12 mb-3">
 							<label className="fs-5 fw-semibold mb-2">Sections</label>
@@ -377,7 +381,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 											onChange={handleSectionFileChange(index)}
 											disabled={loading}
 										/>
-										{loading && <div>Loading...</div>}
+										{loading && <div className="loader mt-2"></div>}
 										{section.fileUrl && (
 											<img
 												src={section.fileUrl}
@@ -386,6 +390,13 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 											/>
 										)}
 									</div>
+									<button
+										type="button"
+										className="btn btn-danger mt-2"
+										onClick={() => handleDeleteSection(index)}
+									>
+										Delete Section
+									</button>
 								</div>
 							))}
 							<button
@@ -400,7 +411,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
 						<div className="col-12">
 							<button type="submit" className="btn btn-primary" disabled={loading}>
-								Save Article
+								Save Camp Fire
 							</button>
 						</div>
 					</form>

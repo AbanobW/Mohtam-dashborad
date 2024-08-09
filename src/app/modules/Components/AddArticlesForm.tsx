@@ -45,7 +45,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const authToken = auth?.accessToken;
 
 	const [title, setTitle] = useState<string>("");
-	const [summary, setSummary] = useState<string>("");
+	const [summary, setSummary] = useState<string>("summary test");
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 	const [coverImageUrl, setCoverImageUrl] = useState<string>("");
 	const [subjectId, setSubjectId] = useState<string>("");
@@ -210,7 +210,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 			if (response.ok) {
 				toast.success("Camp Fires added successfully!");
 				setTitle("");
-				setSummary("");
+				setSummary("Camp Fires Summary");
 				setCoverImageFile(null);
 				setCoverImageUrl("");
 				setSubjectId("");
@@ -261,7 +261,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 							required
 						/>
 					</div>
-					<div className="mb-4 col-12 col-md-6">
+					{/* <div className="mb-4 col-12 col-md-6">
 						<label htmlFor="summary" className="fs-5 fw-semibold mb-2">
 							Summary
 						</label>
@@ -272,7 +272,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 							onChange={(e) => setSummary(e.target.value)}
 							required
 						/>
-					</div>
+					</div> */}
 
 					<div className="mb-4 col-12 col-md-6">
 						<label htmlFor="subjectId" className="fs-5 fw-semibold mb-2">

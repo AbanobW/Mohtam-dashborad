@@ -32,9 +32,9 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [page, setPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
-	const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(
-		null
-	);
+	// const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(
+	// 	null
+	// );
 	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
@@ -212,7 +212,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 							<tr className="fw-bold text-muted bg-light  border-bottom">
 								<th className="ps-4 min-w-50px rounded-start">#</th>
 								<th className="min-w-250px">Title</th>
-								<th className="min-w-300px">Summary</th>
+								{/* <th className="min-w-300px">Summary</th> */}
 								<th className="min-w-200px">Tent</th>
 								{/* <th className="min-w-50px">Cover Image</th> */}
 								<th className="min-w-50px">Published</th>
@@ -243,11 +243,11 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 											</div>
 										</div>
 									</td>
-									<td>
+									{/* <td>
 										<span className="text-gray-900 fw-bold d-block mb-1 fs-6">
 											{item.summary}
 										</span>
-									</td>
+									</td> */}
 									<td>
 										<span className="text-gray-900 fw-bold d-block mb-1 fs-6">
 											{getSubjectTitle(item.subjectId)}
