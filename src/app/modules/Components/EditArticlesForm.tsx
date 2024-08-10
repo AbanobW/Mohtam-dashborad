@@ -96,7 +96,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
 		const fetchTags = async () => {
 			try {
-				const response = await fetch(`${apiUrl}/tags`, {
+				const response = await fetch(`${apiUrl}/tags?page=0&size=99999`, {
 					headers: {
 						Authorization: `Bearer ${authToken}`,
 						"Content-Type": "application/json",
