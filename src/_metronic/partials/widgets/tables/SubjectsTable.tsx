@@ -31,7 +31,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
-	const imgUrl = import.meta.env.VITE_APP_Img_URL;
+	// const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
 	const fetchSubjects = async (page: number = 0) => {
 		try {
@@ -57,7 +57,7 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 	const handleDelete = (id: string) => {
 		Swal.fire({
 			title: "Are you sure?",
-			text: "You will not be able to recover this subject!",
+			text: "You will not be able to recover this tent!",
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Yes, delete it!",
@@ -74,15 +74,15 @@ const SubjectsTable: React.FC<Props> = ({ className }) => {
 					.then((response) => {
 						if (response.ok) {
 							setItems(items.filter((item) => item.id !== id));
-							toast.success("Subject deleted successfully");
+							toast.success("Tent deleted successfully");
 						} else {
 							console.error("Error deleting item:", response.statusText);
-							toast.error("Failed to delete subject");
+							toast.error("Failed to delete tent");
 						}
 					})
 					.catch((error) => {
 						console.error("Error deleting item:", error);
-						toast.error("Failed to delete subject");
+						toast.error("Failed to delete tent");
 					});
 			}
 		});

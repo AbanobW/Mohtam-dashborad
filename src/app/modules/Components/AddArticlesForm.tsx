@@ -343,7 +343,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 					<div className="col-12">
 						<h4 className="mb-3">Sections</h4>
 						{sections.map((section, index) => (
-							<div key={index} className="mb-4">
+							<div key={index} className="border rounded p-4 mb-4">
 								<label className="fs-5 fw-semibold mb-2">Order</label>
 								<input
 									type="number"

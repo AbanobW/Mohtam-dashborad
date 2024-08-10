@@ -79,7 +79,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 	const handleDelete = (id: string) => {
 		Swal.fire({
 			title: "Are you sure?",
-			text: "You will not be able to recover this article!",
+			text: "You will not be able to recover this camp fire!",
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Yes, delete it!",
@@ -96,15 +96,15 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 					.then((response) => {
 						if (response.ok) {
 							setItems(items.filter((item) => item.id !== id));
-							toast.success("Article deleted successfully");
+							toast.success("Camp fire deleted successfully");
 						} else {
 							console.error("Error deleting item:", response.statusText);
-							toast.error("Failed to delete article");
+							toast.error("Failed to delete camp fire");
 						}
 					})
 					.catch((error) => {
 						console.error("Error deleting item:", error);
-						toast.error("Failed to delete article");
+						toast.error("Failed to delete camp fire");
 					});
 			}
 		});
@@ -116,7 +116,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 			title: "Are you sure?",
 			text: `Do you want to ${
 				newStatus ? "publish" : "unpublish"
-			} this article?`,
+			} this camp fire?`,
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Yes",
@@ -140,15 +140,15 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 									item.id === id ? { ...item, published: newStatus } : item
 								)
 							);
-							toast.success("Article status updated successfully");
+							toast.success("Camp fire status updated successfully");
 						} else {
 							console.error("Error updating item:", response.statusText);
-							toast.error("Failed to update article status");
+							toast.error("Failed to update camp fire status");
 						}
 					})
 					.catch((error) => {
 						console.error("Error updating item:", error);
-						toast.error("Failed to update article status");
+						toast.error("Failed to update camp fire status");
 					});
 			}
 		});
@@ -160,7 +160,7 @@ const ArticlesTable: React.FC<Props> = ({ className }) => {
 
 	const getSubjectTitle = (subjectId: string) => {
 		const subject = subjects.find((subject) => subject.id === subjectId);
-		return subject ? subject.title : "Unknown Subject";
+		return subject ? subject.title : "No Tent";
 	};
 
 	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

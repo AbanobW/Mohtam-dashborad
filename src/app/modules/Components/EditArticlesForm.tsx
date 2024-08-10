@@ -349,7 +349,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 						<div className="col-12 mb-3">
 							<label className="fs-5 fw-semibold mb-2">Sections</label>
 							{sections.map((section, index) => (
-								<div key={index} className="border rounded p-3 mb-4">
+								<div key={index} className="border rounded p-4 mb-4">
 									<div className="mb-3">
 										<label className="form-label">Order</label>
 										<input
