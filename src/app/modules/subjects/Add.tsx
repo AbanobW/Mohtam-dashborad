@@ -62,16 +62,13 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 
 		try {
 			// Request presigned URL and file ID
-			const presignedUrlResponse = await fetch(
-				`${apiUrl}/presignedurls`,
-				{
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${authToken}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+					"Content-Type": "application/json",
+				},
+			});
 
 			if (!presignedUrlResponse.ok) {
 				throw new Error("Failed to get presigned URL");
@@ -81,7 +78,6 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			const presignedUrl = presignedUrlData.presignedUrl;
 			const fileId = presignedUrlData.fileId;
 			const imgUrl = import.meta.env.VITE_APP_Img_URL;
-
 
 			// Upload the image using the presigned URL
 			const uploadResponse = await fetch(presignedUrl, {
@@ -108,7 +104,10 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			});
 
 			if (!response.ok) {
-				throw new Error("Failed to add tent");
+				// Extract and display the specific error message from the API response
+				const errorData = await response.json();
+				const errorMessage = errorData.message || "Failed to add tent.";
+				throw new Error(errorMessage);
 			}
 
 			// Clear form inputs
@@ -140,8 +139,8 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			}
 		} catch (error) {
 			console.error("Error adding tent:", error);
-			// Show error toast
-			toast.error("Failed to add tent. Please try again later.", {
+			// Show error toast with the specific error message
+			toast.error(error.message, {
 				position: "top-right",
 				autoClose: 3000,
 				hideProgressBar: false,

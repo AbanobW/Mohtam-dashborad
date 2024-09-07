@@ -43,6 +43,8 @@ type Tag = {
 const AddArticlesForm: React.FC<Props> = ({ className }) => {
 	const { auth } = useAuth();
 	const authToken = auth?.accessToken;
+	const [disabled, setDisabled] = useState(true)
+
 
 	const [title, setTitle] = useState<string>("");
 	const [summary, setSummary] = useState<string>("summary test");
@@ -122,6 +124,8 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
 			setLoading((prev) => ({ ...prev, [loaderKey]: true }));
+			setDisabled(true);
+
 			try {
 				// Request a presigned URL
 				const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
@@ -147,6 +151,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 				toast.error("Failed to upload file.");
 			} finally {
 				setLoading((prev) => ({ ...prev, [loaderKey]: false }));
+				setDisabled(false);
 			}
 		}
 	};
@@ -385,7 +390,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 						</button>
 					</div>
 					<div className="col-12 text-end">
-						<button type="submit" className="btn btn-primary">
+						<button type="submit" className="btn btn-primary" disabled={disabled}>
 							Add Camp Fires
 						</button>
 					</div>
