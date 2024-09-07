@@ -187,16 +187,28 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 			}
 		} catch (error) {
 			console.error("Error updating tent:", error);
-			// Show error toast
-			toast.error(error.message, {
-				position: "top-right",
-				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
+			if (error instanceof Error) {
+				toast.error(error.message, {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			} else {
+				// Handle unexpected errors
+				toast.error("An unexpected error occurred", {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
 		}
 	};
 

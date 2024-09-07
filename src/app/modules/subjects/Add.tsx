@@ -139,16 +139,29 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			}
 		} catch (error) {
 			console.error("Error adding tent:", error);
-			// Show error toast with the specific error message
-			toast.error(error.message, {
-				position: "top-right",
-				autoClose: 3000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
+			// Handle error of type unknown by checking if it's an instance of Error
+			if (error instanceof Error) {
+				toast.error(error.message, {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			} else {
+				// Handle unexpected errors
+				toast.error("An unexpected error occurred", {
+					position: "top-right",
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
 		}
 	};
 
