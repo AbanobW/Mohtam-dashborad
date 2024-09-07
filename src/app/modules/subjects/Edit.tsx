@@ -121,6 +121,34 @@ export const Edit: React.FC<EditProps> = ({ subjectId, onEditSuccess }) => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
+		
+		// Validation for title and description length
+		if (formData.title.length < 3) {
+			toast.error("Title must be at least 3 characters long.", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+			return;
+		}
+
+		if (formData.description.length < 10) {
+			toast.error("Description must be at least 10 characters long.", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+			return;
+		}
+
 		// Check if any field is empty
 		if (!formData.title || !formData.description || !formData.coverImageUrl) {
 			toast.error("All fields are required. Please fill in all fields.", {
