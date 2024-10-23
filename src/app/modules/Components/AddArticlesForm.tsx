@@ -378,6 +378,7 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 									type="file"
 									className="form-control"
 									onChange={handleSectionFileChange(index)}
+									title="Upload media file"
 								/>
 							</div>
 						))}
