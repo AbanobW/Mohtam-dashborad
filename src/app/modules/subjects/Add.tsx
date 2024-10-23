@@ -12,6 +12,7 @@ interface FormData {
 	title: string;
 	description: string;
 	image: File | null;
+	uploadedImageUrl: string; // Store the uploaded image URL
 }
 
 export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
@@ -21,9 +22,12 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 		title: "",
 		description: "",
 		image: null,
+		uploadedImageUrl: "", // Add this to hold the final image URL
 	});
+	const [loading, setLoading] = useState<boolean>(false); // New state for loading
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
+	const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -33,13 +37,79 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 		});
 	};
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// Handle file selection
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
 			setFormData({
 				...formData,
 				image: file,
 			});
+			// Upload the file immediately after selection
+			await handleImageUpload(file);
+		}
+	};
+
+	// Handle the image upload process
+	const handleImageUpload = async (file: File) => {
+		try {
+			setLoading(true); // Start the loader when the file is selected
+
+			// Request presigned URL and file ID
+			const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (!presignedUrlResponse.ok) {
+				throw new Error("Failed to get presigned URL");
+			}
+
+			const presignedUrlData = await presignedUrlResponse.json();
+			const presignedUrl = presignedUrlData.presignedUrl;
+			const fileId = presignedUrlData.fileId;
+
+			// Upload the image using the presigned URL
+			const uploadResponse = await fetch(presignedUrl, {
+				method: "PUT",
+				body: file,
+			});
+
+			if (!uploadResponse.ok) {
+				throw new Error("Failed to upload image");
+			}
+
+			// Store the final image URL in formData
+			setFormData((prevData) => ({
+				...prevData,
+				uploadedImageUrl: imgUrl + fileId,
+			}));
+
+			toast.success("Image uploaded successfully!", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		} catch (error) {
+			console.error("Error uploading image:", error);
+			toast.error("Image upload failed. Please try again.", {
+				position: "top-right",
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		} finally {
+			setLoading(false); // Stop the loader when the upload completes
 		}
 	};
 
@@ -74,7 +144,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 		}
 
 		// Check if any field is empty
-		if (!formData.title || !formData.description || !formData.image) {
+		if (!formData.title || !formData.description || !formData.uploadedImageUrl) {
 			toast.error("All fields are required. Please fill in all fields.", {
 				position: "top-right",
 				autoClose: 3000,
@@ -88,34 +158,6 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 		}
 
 		try {
-			// Request presigned URL and file ID
-			const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${authToken}`,
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (!presignedUrlResponse.ok) {
-				throw new Error("Failed to get presigned URL");
-			}
-
-			const presignedUrlData = await presignedUrlResponse.json();
-			const presignedUrl = presignedUrlData.presignedUrl;
-			const fileId = presignedUrlData.fileId;
-			const imgUrl = import.meta.env.VITE_APP_Img_URL;
-
-			// Upload the image using the presigned URL
-			const uploadResponse = await fetch(presignedUrl, {
-				method: "PUT",
-				body: formData.image,
-			});
-
-			if (!uploadResponse.ok) {
-				throw new Error("Failed to upload image");
-			}
-
 			// Proceed to add the subject
 			const response = await fetch(`${apiUrl}/subjects`, {
 				method: "POST",
@@ -126,12 +168,11 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 				body: JSON.stringify({
 					title: formData.title,
 					description: formData.description,
-					coverImageUrl: imgUrl + fileId,
+					coverImageUrl: formData.uploadedImageUrl, // Use the uploaded image URL
 				}),
 			});
 
 			if (!response.ok) {
-				// Extract and display the specific error message from the API response
 				const errorData = await response.json();
 				const errorMessage = errorData.message || "Failed to add tent.";
 				throw new Error(errorMessage);
@@ -142,6 +183,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 				title: "",
 				description: "",
 				image: null,
+				uploadedImageUrl: "",
 			});
 
 			// Reset file input
@@ -166,7 +208,6 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 			}
 		} catch (error) {
 			console.error("Error adding tent:", error);
-			// Handle error of type unknown by checking if it's an instance of Error
 			if (error instanceof Error) {
 				toast.error(error.message, {
 					position: "top-right",
@@ -178,7 +219,6 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 					progress: undefined,
 				});
 			} else {
-				// Handle unexpected errors
 				toast.error("An unexpected error occurred", {
 					position: "top-right",
 					autoClose: 3000,
@@ -236,45 +276,41 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 												onChange={handleChange}
 											/>
 										</div>
-										<div className="col-md-12 mt-3">
+											<div className="col-md-12">
 											<label className="required fs-5 fw-semibold mb-2">
 												Description
 											</label>
-											<input
-												type="text"
+											<textarea
 												className="form-control form-control-solid mb-3 mb-lg-0"
 												name="description"
 												value={formData.description}
 												onChange={handleChange}
-											/>
+												rows={3}
+											></textarea>
 										</div>
-										<div className="col-md-12 mt-3">
-											<label className="required fs-5 fw-semibold mb-2">
-												Cover Image
-											</label>
+										<div className="col-md-12">
+											<label className="fs-5 fw-semibold mb-2">Image</label>
 											<input
 												type="file"
-												ref={fileInputRef}
+												className="form-control form-control-solid"
 												onChange={handleFileChange}
-												className="form-control"
-												name="image"
+												ref={fileInputRef}
+												disabled={loading} // Disable file input while uploading
 											/>
 										</div>
-										<div className="col-md-12 mt-5 text-center">
+										<div className="col-md-12 text-center mt-4">
 											<button
 												type="submit"
-												id="kt_sign_in_submit"
 												className="btn btn-primary"
+												disabled={loading || !formData.uploadedImageUrl} // Disable submit if still uploading or no image uploaded
 											>
-												Submit
+												{loading ? (
+													<span className="spinner-border spinner-border-sm" />
+												) : (
+													"Submit"
+												)}
 											</button>
-											<button
-												type="button"
-												className="btn btn-dark ms-3"
-												data-bs-dismiss="modal"
-											>
-												Close
-											</button>
+											<ToastContainer />
 										</div>
 									</div>
 								</div>
@@ -283,7 +319,6 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 					</div>
 				</div>
 			</div>
-			<ToastContainer />
 		</>
 	);
 };
