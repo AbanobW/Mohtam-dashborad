@@ -360,6 +360,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 												handleSectionChange(index, "order", e.target.value)
 											}
 											required
+											title="Order"
 										/>
 									</div>
 									<div className="mb-3">
@@ -380,6 +381,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 											className="form-control"
 											onChange={handleSectionFileChange(index)}
 											disabled={loading}
+											title="Upload Section Image"
 										/>
 										{loading && <div className="loader mt-2"></div>}
 										{section.fileUrl && (

@@ -29,7 +29,15 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+	};
+
+	const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
 		setFormData({
 			...formData,
@@ -273,7 +281,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 												className="form-control form-control-solid mb-3 mb-lg-0"
 												name="title"
 												value={formData.title}
-												onChange={handleChange}
+												onChange={handleInputChange}
 											/>
 										</div>
 											<div className="col-md-12">
@@ -284,7 +292,7 @@ export const Add: React.FC<AddProps> = ({ onAddSuccess }) => {
 												className="form-control form-control-solid mb-3 mb-lg-0"
 												name="description"
 												value={formData.description}
-												onChange={handleChange}
+												onChange={handleTextareaChange}
 												rows={3}
 											></textarea>
 										</div>
