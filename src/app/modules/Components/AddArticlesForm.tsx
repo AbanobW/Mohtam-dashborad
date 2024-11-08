@@ -380,6 +380,22 @@ const AddArticlesForm: React.FC<Props> = ({ className }) => {
 									onChange={handleSectionFileChange(index)}
 									title="Upload media file"
 								/>
+								{section.fileUrl && (
+											<>
+												{section.fileType === "IMAGE" ? (
+													<img
+														src={section.fileUrl}
+														alt="Section"
+														className="img-fluid mt-2"
+													/>
+												) : (
+													<video controls className="img-fluid mt-2">
+														<source src={section.fileUrl} type="video/mp4" />
+														Your browser does not support the video tag.
+													</video>
+												)}
+											</>
+										)}
 							</div>
 						))}
 						<button
