@@ -51,6 +51,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 	const location = useLocation() as { state: LocationState };
 	const navigate = useNavigate();
 	const articleData = location.state.item;
+	const [disabled, setDisabled] = useState(false)
 
 	const [title, setTitle] = useState<string>(articleData?.title || "");
 	const [summary, setSummary] = useState<string>(
@@ -143,6 +144,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 	) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
+			setDisabled(true);
 			try {
 				if (typeof index === "number") {
 					setSectionLoading((prev) => {
@@ -185,6 +187,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
 			} finally {
+				setDisabled(false);
 				if (typeof index === "number") {
 					setSectionLoading((prev) => {
 						const newLoading = [...prev];
@@ -449,7 +452,7 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 							<button
 								type="submit"
 								className="btn btn-primary"
-								disabled={loading}
+								disabled={disabled}
 							>
 								Save Camp Fire
 							</button>
