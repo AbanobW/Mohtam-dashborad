@@ -17,7 +17,7 @@ type Section = {
 	order: number;
 	content: string;
 	fileUrl: string | null;
-	fileType: string;
+	fileType: "IMAGE" | "VIDEO"; // Updated to handle both types
 };
 
 type Article = {
@@ -53,7 +53,9 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 	const articleData = location.state.item;
 
 	const [title, setTitle] = useState<string>(articleData?.title || "");
-	const [summary, setSummary] = useState<string>(articleData?.summary || "summary");
+	const [summary, setSummary] = useState<string>(
+		articleData?.summary || "summary"
+	);
 	const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 	const [coverImageUrl, setCoverImageUrl] = useState<string>(
 		articleData?.coverImageUrl || ""
@@ -76,6 +78,10 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
 	const apiUrl = import.meta.env.VITE_APP_API_URL;
 	const imgUrl = import.meta.env.VITE_APP_Img_URL;
+
+	const [sectionLoading, setSectionLoading] = useState<boolean[]>(
+		sections.map(() => false)
+	);
 
 	useEffect(() => {
 		const fetchSubjects = async () => {
@@ -132,12 +138,22 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
 	const handleFileChange = async (
 		e: React.ChangeEvent<HTMLInputElement>,
-		setFileId: (fileId: string) => void
+		setFileId: (fileId: string) => void,
+		index?: number
 	) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
 			try {
-				setLoading(true);
+				if (typeof index === "number") {
+					setSectionLoading((prev) => {
+						const newLoading = [...prev];
+						newLoading[index] = true;
+						return newLoading;
+					});
+				} else {
+					setLoading(true);
+				}
+
 				const presignedUrlResponse = await fetch(`${apiUrl}/presignedurls`, {
 					method: "POST",
 					headers: {
@@ -152,12 +168,32 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 					method: "PUT",
 					body: file,
 				});
+
+				// Determine file type
+				const fileType = file.type.startsWith("image/") ? "IMAGE" : "VIDEO";
+
+				// Set file ID and type in the section
 				setFileId(fileId);
-				setLoading(false);
+
+				if (typeof index === "number") {
+					const newSections = [...sections];
+					newSections[index].fileUrl = `${imgUrl}${fileId}`;
+					newSections[index].fileType = fileType;
+					setSections(newSections);
+				}
 			} catch (error) {
 				console.error("Error uploading file:", error);
 				toast.error("Failed to upload file.");
-				setLoading(false);
+			} finally {
+				if (typeof index === "number") {
+					setSectionLoading((prev) => {
+						const newLoading = [...prev];
+						newLoading[index] = false;
+						return newLoading;
+					});
+				} else {
+					setLoading(false);
+				}
 			}
 		}
 	};
@@ -170,11 +206,15 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 
 	const handleSectionFileChange =
 		(index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-			handleFileChange(e, (fileId: string) => {
-				const newSections = [...sections];
-				newSections[index].fileUrl = `${imgUrl}${fileId}`;
-				setSections(newSections);
-			});
+			handleFileChange(
+				e,
+				(fileId: string) => {
+					const newSections = [...sections];
+					newSections[index].fileUrl = `${imgUrl}${fileId}`;
+					setSections(newSections);
+				},
+				index
+			);
 		};
 
 	const handleTagChange = (selectedOptions: any) => {
@@ -195,7 +235,6 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 			tags,
 			published,
 		};
-
 
 		try {
 			const response = await fetch(`${apiUrl}/articles/${article.id}`, {
@@ -344,25 +383,10 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 							)}
 						</div>
 
-						
-
 						<div className="col-12 mb-3">
 							<label className="fs-5 fw-semibold mb-2">Sections</label>
 							{sections.map((section, index) => (
 								<div key={index} className="border rounded p-4 mb-4">
-									<div className="mb-3">
-										<label className="form-label">Order</label>
-										<input
-											type="number"
-											className="form-control"
-											value={section.order}
-											onChange={(e) =>
-												handleSectionChange(index, "order", e.target.value)
-											}
-											required
-											title="Order"
-										/>
-									</div>
 									<div className="mb-3">
 										<label className="form-label">Content</label>
 										<ReactQuill
@@ -375,21 +399,31 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 										/>
 									</div>
 									<div className="mb-3">
-										<label className="form-label">Image</label>
+										<label className="form-label">File</label>
 										<input
 											type="file"
 											className="form-control"
 											onChange={handleSectionFileChange(index)}
-											disabled={loading}
-											title="Upload Section Image"
+											disabled={sectionLoading[index]}
 										/>
-										{loading && <div className="loader mt-2"></div>}
+										{sectionLoading[index] && (
+											<div className="loader mt-2"></div>
+										)}
 										{section.fileUrl && (
-											<img
-												src={section.fileUrl}
-												alt="Section"
-												className="img-fluid mt-2"
-											/>
+											<>
+												{section.fileType === "IMAGE" ? (
+													<img
+														src={section.fileUrl}
+														alt="Section"
+														className="img-fluid mt-2"
+													/>
+												) : (
+													<video controls className="img-fluid mt-2">
+														<source src={section.fileUrl} type="video/mp4" />
+														Your browser does not support the video tag.
+													</video>
+												)}
+											</>
 										)}
 									</div>
 									<button
@@ -412,7 +446,11 @@ const EditArticlesForm: React.FC<Props> = ({ className }) => {
 						</div>
 
 						<div className="col-12">
-							<button type="submit" className="btn btn-primary" disabled={loading}>
+							<button
+								type="submit"
+								className="btn btn-primary"
+								disabled={loading}
+							>
 								Save Camp Fire
 							</button>
 						</div>
