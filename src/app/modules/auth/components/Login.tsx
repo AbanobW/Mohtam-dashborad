@@ -8,7 +8,7 @@ import { toAbsoluteUrl } from '../../../../_metronic/helpers'
 import { useAuth } from '../core/Auth'
 
 const loginSchema = Yup.object().shape({
-  userName: Yup.string()
+  email: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('User Name is required'),
@@ -19,8 +19,8 @@ const loginSchema = Yup.object().shape({
 })
 
 const initialValues = {
-  // userName: 'admon',
-  userName: '',
+  // email: 'admon',
+  email: '',
   password: '',
   // password: '1q2w3eX#',
 }
@@ -35,7 +35,7 @@ export function Login() {
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true)
       try {
-        const auth = await login(values.userName, values.password)
+        const auth = await login(values.email, values.password)
         saveAuth(auth)
         const { data: user } = await getUserByToken(auth.accessToken)
         setCurrentUser(user)
@@ -76,22 +76,22 @@ export function Login() {
       )}
 
       <div className='fv-row mb-8'>
-        <label className='form-label fs-6 fw-bolder text-gray-900'>User Name</label>
+        <label className='form-label fs-6 fw-bolder text-gray-900'>Email</label>
         <input
-          placeholder='User Name'
-          {...formik.getFieldProps('userName')}
+          placeholder='Email'
+          {...formik.getFieldProps('email')}
           className={clsx(
             'form-control bg-transparent',
-            { 'is-invalid': formik.touched.userName && formik.errors.userName },
-            { 'is-valid': formik.touched.userName && !formik.errors.userName }
+            { 'is-invalid': formik.touched.email && formik.errors.email },
+            { 'is-valid': formik.touched.email && !formik.errors.email }
           )}
           type='text'
-          name='userName'
+          name='email'
           autoComplete='off'
         />
-        {formik.touched.userName && formik.errors.userName && (
+        {formik.touched.email && formik.errors.email && (
           <div className='fv-plugins-message-container'>
-            <span role='alert'>{formik.errors.userName}</span>
+            <span role='alert'>{formik.errors.email}</span>
           </div>
         )}
       </div>

@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import { useAuth } from "../../../../app/modules/auth";
 import { Edit } from "../../../../app/modules/users/Edit";
+import { AddAdmin } from "../../../../app/modules/users/Add";
 
 type Props = {
 	className: string;
@@ -145,6 +146,8 @@ const UsersTable: React.FC<Props> = () => {
 		<>
 			<div className="card">
 				<div className="card-header border-0 pt-5">
+					<div className="d-flex">
+
 					<h3 className="card-title align-items-start flex-column">
 						<span className="card-label fw-bold fs-3 mb-1">Users</span>
 					</h3>
@@ -163,6 +166,19 @@ const UsersTable: React.FC<Props> = () => {
 							onChange={handleSearchChange}
 						/>
 					</div>
+					</div>
+					<div className="card-toolbar">
+										<a
+											className="btn btn-sm btn-light-primary"
+											data-bs-toggle="modal"
+											data-bs-target="#kt_modal_add_admin"
+										>
+											<KTIcon iconName="plus" className="fs-2" />
+											Add New Admin
+										</a>
+					
+										<AddAdmin onAddSuccess={() => fetchUsers(page)} />
+									</div>
 				</div>
 
 				<div className="card-body py-4">
