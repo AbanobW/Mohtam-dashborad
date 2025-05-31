@@ -7,7 +7,9 @@ import { Toolbar } from "../../../_metronic/layout/components/toolbar/Toolbar";
 import { Content } from "../../../_metronic/layout/components/Content";
 import fires from "../../../../public/media/icons/sho3la.svg";
 import camps from "../../../../public/media/icons/campsWhite.svg";
-
+import { AnalyticsWidget } from "../../../_metronic/partials/widgets/analytics/AnalyticsWidget";
+import { SubjectsAnalytics } from "../../modules/subjects/SubjectsAnalytics";
+import { ArticlesAnalytics } from "../../modules/articles/ArticlesAnalytics";
 const DashboardPage = () => {
 	useEffect(() => {
 		// We have to show toolbar only for dashboard page
@@ -69,6 +71,29 @@ const DashboardPage = () => {
 							description="Users"
 							link="/users"
 						/>
+					</div>
+				</div>
+				{/* end::Row */}
+
+				{/* begin::Row */}
+				<div className="row g-5 g-xl-8 mt-5">
+					<div className="col-12">
+						<AnalyticsWidget className="mb-5 mb-xl-8" />
+					</div>
+				</div>
+				{/* end::Row */}
+
+				{/* begin::Row */}
+				<div className="row g-5 g-xl-8 mt-5">
+					<div className="col-12">
+						<SubjectsAnalytics />
+					</div>
+				</div>
+				{/* end::Row */}
+				{/* begin::Row */}
+				<div className="row g-5 g-xl-8 mt-5">
+					<div className="col-12">
+						<ArticlesAnalytics />
 					</div>
 				</div>
 				{/* end::Row */}
